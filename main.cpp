@@ -1,6 +1,7 @@
 #include <Novice.h>
+#include <math.h>
 
-const char kWindowTitle[] = "LC1C_23_ヤリタ_コウヤww_タイトル";
+const char kWindowTitle[] = "LC1C_23_ヤリタ_コウヤ_タイトル";
 
 typedef struct Vector2 {
 	float x;
@@ -11,8 +12,12 @@ typedef struct Ball {
 	Vector2 pos;
 	Vector2 acceleration;
 	Vector2 velocity;
+	Vector2 move;
+	float lenght;
 	float radius;
 	int jumpCount;
+	int rect;
+	int moveSpeed;
 }Ball;
 
 // Windowsアプリでのエントリーポイント(main関数)
@@ -26,14 +31,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	char preKeys[256] = { 0 };
 
 	Ball ball;
-	ball.pos.x = 100.0f;
-	ball.pos.y = 100.0f;
-	ball.velocity.x = 0.0f;
-	ball.velocity.y = 0.0f;
-	ball.acceleration.x = 0.0f;
-	ball.acceleration.y = -0.8f;
+	ball.pos = { 100.0f,100.0f };
+	ball.velocity = { 0.0f,0.0f };
+	ball.acceleration = { 0.0f,-0.8f };
+	ball.move = { 0.0f,0.0f };
+	ball.lenght = 0.0f;
 	ball.radius = 20.0f;
 	ball.jumpCount = 0;
+	ball.rect = 100;
+	ball.moveSpeed = 5;
 
 
 	// ウィンドウの×ボタンが押されるまでループ
@@ -49,17 +55,44 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓更新処理ここから
 		///
 
+#pragma region 自機の移動
+		
+		ball.move.x = 0.0f;
+		ball.move.y = 0.0f;
+
+		if (keys[DIK_A] || keys[DIK_LEFT]) {
+			ball.move.x -= 1.0f;
+		}
+
+		if (keys[DIK_D] || keys[DIK_RIGHT]) {
+			ball.move.x += 1.0f;
+		}
+
+		ball.lenght = sqrtf(ball.move.x * ball.move.x + ball.move.y * ball.move.y);
+		if (ball.lenght != 0.0f) {
+			ball.move.x /= ball.lenght;
+			ball.move.y /= ball.lenght;
+		}
+
+		ball.pos.x += ball.move.x * ball.moveSpeed;
+		ball.pos.y += ball.move.y * ball.moveSpeed;
+
+#pragma endregion
+
+
+#pragma region ジャンプ
+
 		//地上でのジャンプ
-		if (keys[DIK_SPACE] != 0 && ball.pos.y == ball.radius) {
+		if (keys[DIK_SPACE] != 0 && !preKeys[DIK_SPACE]&& ball.pos.y == ball.radius) {
 			if (ball.jumpCount <= 2) {
-				ball.velocity.y = 14.0f;
+				ball.velocity.y = 12.0f;
 			}
 		}
 
 		//空中ジャンプ
-		if (keys[DIK_SPACE] != 0 && ball.pos.y >= ball.radius) {
+		if (keys[DIK_SPACE] != 0 && !preKeys[DIK_SPACE] && ball.pos.y >= ball.radius) {
 			if (ball.jumpCount <= 2) {
-				ball.velocity.y = 14.0f;
+				ball.velocity.y = 12.0f;
 			}
 		}
 
@@ -80,6 +113,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ball.pos.y = ball.radius;
 			ball.jumpCount = 0;
 		}
+
+#pragma endregion
 
 		///
 		/// ↑更新処理ここまで
