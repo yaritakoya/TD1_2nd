@@ -4,8 +4,6 @@
 
 
 
-
-
 const char kWindowTitle[] = "LC1C_23_ヤリタ_コウヤ_タイトル";
 
 typedef struct Vector2 {
@@ -49,6 +47,7 @@ struct Bullet
 	float theta;
 	float coolTime;
 };
+
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
@@ -61,6 +60,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//Bullet
 	const int maxBullet = 6;
+
 	//横
 	Bullet bulletBeside[maxBullet] = {};
 	for (int i = 0; i < maxBullet; i++) {
@@ -75,8 +75,45 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		bulletBeside[i].length = 0.0f;
 		bulletBeside[i].theta = 0.0f;
 		bulletBeside[i].coolTime = 30.0f;
+	}
 
+	//縦
+	Bullet bulletVertical[maxBullet] = {};
+	for (int i = 0; i < maxBullet; i++) {
+		bulletVertical[i].pos = { 640.0f,30.0f };
+		bulletVertical[i].prePoint;
+		bulletVertical[i].fixedPos = { 640.0f,30.0f };
+		bulletVertical[i].move;
+		bulletVertical[i].radius = 30.0f;
+		bulletVertical[i].speed = 10.0f;
+		bulletVertical[i].velocity = 10.0f;
+		bulletVertical[i].isAlive = true;
+		bulletVertical[i].length = 0.0f;
+		bulletVertical[i].theta = 0.0f;
+		bulletVertical[i].coolTime = 30.0f;
+	}
 
+	//斜め
+	Bullet bulletDiagonal[maxBullet] = {};
+	for (int i = 0; i < maxBullet; i++) {
+		bulletDiagonal[i].pos = { 1250.0f,30.0f };
+		bulletDiagonal[i].prePoint;
+		bulletDiagonal[i].fixedPos = { 1250.0f,30.0f };
+		bulletDiagonal[i].move;
+		bulletDiagonal[i].radius = 30.0f;
+		bulletDiagonal[i].speed = 10.0f;
+		bulletDiagonal[i].velocity = 10.0f;
+		bulletDiagonal[i].isAlive = true;
+		bulletDiagonal[i].length = 0.0f;
+		bulletDiagonal[i].theta = 0.0f;
+		bulletDiagonal[i].coolTime = 30.0f;
+	}
+
+	/*int coolTimeVertical = 30;*/
+	int coolTimeBeside = 0;
+	float bullretBesideCount = 0.0f;
+	float bullretVerticalCount = 0.0f;
+	float bullretDiagonalCount = 0.0f;
 
 	int block1 = Novice::LoadTexture("./Resources/block_1.png");//地面ブロック
 	int block2 = Novice::LoadTexture("./Resources/block_2.png");//浮いてるブロック
@@ -134,42 +171,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 
-	}
-	//縦
-	Bullet bulletVertical[maxBullet] = {};
-	for (int i = 0; i < maxBullet; i++) {
-		bulletVertical[i].pos = { 640.0f,30.0f };
-		bulletVertical[i].prePoint;
-		bulletVertical[i].fixedPos = { 640.0f,30.0f };
-		bulletVertical[i].move;
-		bulletVertical[i].radius = 30.0f;
-		bulletVertical[i].speed = 10.0f;
-		bulletVertical[i].velocity = 10.0f;
-		bulletVertical[i].isAlive = true;
-		bulletVertical[i].length = 0.0f;
-		bulletVertical[i].theta = 0.0f;
-		bulletVertical[i].coolTime = 30.0f;
-	}
-	//斜め
-	Bullet bulletDiagonal[maxBullet] = {};
-	for (int i = 0; i < maxBullet; i++) {
-		bulletDiagonal[i].pos = { 1250.0f,30.0f };
-		bulletDiagonal[i].prePoint;
-		bulletDiagonal[i].fixedPos = { 1250.0f,30.0f };
-		bulletDiagonal[i].move;
-		bulletDiagonal[i].radius = 30.0f;
-		bulletDiagonal[i].speed = 10.0f;
-		bulletDiagonal[i].velocity = 10.0f;
-		bulletDiagonal[i].isAlive = true;
-		bulletDiagonal[i].length = 0.0f;
-		bulletDiagonal[i].theta = 0.0f;
-		bulletDiagonal[i].coolTime = 30.0f;
-	}
-	/*int coolTimeVertical = 30;*/
-	int coolTimeBeside = 0;
-	float bullretBesideCount = 0.0f;
-	float bullretVerticalCount = 0.0f;
-	float bullretDiagonalCount = 0.0f;
+
 
 	/*Vector2  fixedPos = { 1200.0f,40.0f };*/
 	// ウィンドウの×ボタンが押されるまでループ
@@ -201,8 +203,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (bulletVertical[i].length >= 1.0f) {
 						bulletVertical[i].move.x /= bulletVertical[i].length;
 						bulletVertical[i].move.y /= bulletVertical[i].length;
-						bulletVertical[i].pos.x += bulletVertical[i].move.x ;
-						bulletVertical[i].pos.y += bulletVertical[i].move.y ;
+						bulletVertical[i].pos.x += bulletVertical[i].move.x;
+						bulletVertical[i].pos.y += bulletVertical[i].move.y;
 					}
 				}
 				if (bulletVertical[i].pos.x <= 0.0f || bulletVertical[i].pos.y <= 0.0f || bulletVertical[i].pos.y >= 720.0f || bulletVertical[i].pos.x >= 1280.0f) {
@@ -230,7 +232,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 			}
 		}
-		
+
 		//横散弾
 		if (bullretBesideCount < 6) {
 			for (int i = 0; i < maxBullet; i++) {
@@ -306,7 +308,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					bulletDiagonal[i].isAlive = false;
 					bulletDiagonal[i].pos = bulletDiagonal[i].fixedPos;
 					bullretDiagonalCount++;
-				if (bullretDiagonalCount == maxBullet) {
+					if (bullretDiagonalCount == maxBullet) {
 						bulletDiagonal[i].isAlive = true;
 						bullretDiagonalCount = 0.0f;
 						for (int j = 0; j < maxBullet; j++) {
@@ -361,7 +363,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			(player.pos.y >= 17 * blockSize && player.pos.y < 18 * blockSize)) {
 			blockNum = 16;
 		}
-		
+
 		//右下
 		if ((player.pos.x >= 24 * blockSize && player.pos.x < 32 * blockSize) &&
 			(player.pos.y >= 9 * blockSize && player.pos.y < 10 * blockSize)) {
@@ -503,7 +505,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			Novice::ScreenPrintf(0, 425 + i * 17, "posxDiagonal%d isAlive%d\n\n", static_cast<int>(bulletDiagonal[i].pos.x), bulletDiagonal[i].isAlive);
 			Novice::ScreenPrintf(0, 527 + i * 17, "posyDiagonal%d isAlive%d", static_cast<int>(bulletDiagonal[i].pos.y), bulletDiagonal[i].isAlive);
 		}
-		
+
 
 		for (int y = 0; y < 23; y++) {
 			for (int x = 0; x < 40; x++) {
