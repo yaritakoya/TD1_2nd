@@ -75,7 +75,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		bulletBeside[i].length = 0.0f;
 		bulletBeside[i].theta = 0.0f;
 		bulletBeside[i].coolTime = 30.0f;
-
+	};
 
 
 	int block1 = Novice::LoadTexture("./Resources/block_1.png");//地面ブロック
@@ -134,7 +134,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 
-	}
+	
 	//縦
 	Bullet bulletVertical[maxBullet] = {};
 	for (int i = 0; i < maxBullet; i++) {
@@ -201,7 +201,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (bulletVertical[i].length >= 1.0f) {
 						bulletVertical[i].move.x /= bulletVertical[i].length;
 						bulletVertical[i].move.y /= bulletVertical[i].length;
-						bulletVertical[i].pos.x += bulletVertical[i].move.x ;
+						bulletVertical[i].pos.x += bulletVertical[i].move.x  ;
 						bulletVertical[i].pos.y += bulletVertical[i].move.y ;
 					}
 				}
@@ -327,6 +327,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 			}
 		}
+
+
 
 #pragma region 地面との当たり判定
 
