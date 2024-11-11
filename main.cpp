@@ -53,7 +53,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 		{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 		{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+		{0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0},
 		{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 		{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 		{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -109,6 +109,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma region 地面との当たり判定
 
+		//段差と床の当たり判定
 		if (player.pos.x >= 0 && player.pos.x < 6 * blockSize ||
 			player.pos.x + player.width >= 34 * blockSize && player.pos.x + player.width < 36 * blockSize) {
 			blockNum = 5;
@@ -128,6 +129,34 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			blockNum = 2;
 		}
 
+		//空中の床の当たり判定
+		//左下
+		if ((player.pos.x >= 7 * blockSize && player.pos.x < 15 * blockSize) &&
+			(player.pos.y >= 9 * blockSize && player.pos.y < 10 * blockSize)) {
+			blockNum = 8;
+		}
+		//左上
+		if ((player.pos.x >= 7 * blockSize && player.pos.x < 15 * blockSize) &&
+			(player.pos.y >= 17 * blockSize && player.pos.y < 18 * blockSize)) {
+			blockNum = 16;
+		}
+		
+		//右下
+		if ((player.pos.x >= 24 * blockSize && player.pos.x < 32 * blockSize) &&
+			(player.pos.y >= 9 * blockSize && player.pos.y < 10 * blockSize)) {
+			blockNum = 8;
+		}
+		//右上
+		if ((player.pos.x >= 24 * blockSize && player.pos.x < 32 * blockSize) &&
+			(player.pos.y >= 17 * blockSize && player.pos.y < 18 * blockSize)) {
+			blockNum = 16;
+		}
+
+		//真ん中
+		if ((player.pos.x >= 13 * blockSize && player.pos.x < 26 * blockSize) &&
+			(player.pos.y >= 13 * blockSize && player.pos.y < 14 * blockSize)) {
+			blockNum = 12;
+		}
 #pragma endregion
 
 #pragma region 自機の移動
@@ -170,14 +199,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//地上でのジャンプ
 		if (keys[DIK_SPACE] != 0 && !preKeys[DIK_SPACE] && player.pos.y == player.height) {
 			if (player.jumpCount <= 2) {
-				player.velocity.y = 12.0f;
+				player.velocity.y = 13.0f;
 			}
 		}
 
 		//空中ジャンプ
 		if (keys[DIK_SPACE] != 0 && !preKeys[DIK_SPACE] && player.pos.y >= player.height) {
 			if (player.jumpCount <= 2) {
-				player.velocity.y = 12.0f;
+				player.velocity.y = 13.0f;
 			}
 		}
 
