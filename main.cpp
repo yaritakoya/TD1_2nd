@@ -359,32 +359,25 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 
 		//空中の床の当たり判定
-		//左下
-		if ((player.pos.x >= 7 * blockSize && player.pos.x < 15 * blockSize) &&
-			(player.pos.y >= 14 * blockSize && player.pos.y < 15 * blockSize)) {
+		//下
+		if ((map[int(player.pos.y / 32 + 1)][int(player.pos.x / 32)] == 2 && player.pos.y >= 13 * blockSize) ||
+			(map[int(player.pos.y / 32 + 1)][int((player.pos.x + player.width) / 32)] == 2 && player.pos.y >= 13 * blockSize)) {
 			blockNum = 13;
-		}
-		//左上
-		if ((player.pos.x >= 7 * blockSize && player.pos.x < 15 * blockSize) &&
-			(player.pos.y >= 6 * blockSize && player.pos.y < 7 * blockSize)) {
-			blockNum = 5;
+			player.velocity.y = 0.0f;
 		}
 
-		//右下
-		if ((player.pos.x >= 24 * blockSize && player.pos.x < 32 * blockSize) &&
-			(player.pos.y >= 14 * blockSize && player.pos.y < 15 * blockSize)) {
-			blockNum = 13;
-		}
-		//右上
-		if ((player.pos.x >= 24 * blockSize && player.pos.x < 32 * blockSize) &&
-			(player.pos.y >= 6 * blockSize && player.pos.y < 7 * blockSize)) {
+		//上
+		if ((map[int(player.pos.y / 32 + 1)][int(player.pos.x / 32)] == 2 && player.pos.y <= 7 * blockSize) ||
+			(map[int(player.pos.y / 32 + 1)][int((player.pos.x + player.width) / 32)] == 2 && player.pos.y <= 7 * blockSize)) {
 			blockNum = 5;
+			player.velocity.y = 0.0f;
 		}
 
 		//真ん中
-		if ((player.pos.x >= 13 * blockSize && player.pos.x < 26 * blockSize) &&
-			(player.pos.y >= 10 * blockSize && player.pos.y < 11 * blockSize)) {
+		if ((map[int(player.pos.y / 32 + 1)][int(player.pos.x / 32)] == 2 && player.pos.y >= 10 * blockSize) &&
+			(map[int(player.pos.y / 32 + 1)][int((player.pos.x + player.width) / 32)] == 2 && player.pos.y <= 11 * blockSize)) {
 			blockNum = 9;
+			player.velocity.y = 0.0f;
 		}
 #pragma endregion
 
@@ -395,18 +388,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		if (keys[DIK_A] || keys[DIK_LEFT]) {
 			player.move.x -= 1.0f;
-			if (player.pos.y == 18 * blockSize && player.pos.x <= 6.1f * blockSize ||
-				player.pos.y == 17 * blockSize && player.pos.x <= 8.1f * blockSize ||
-				player.pos.y == 16 * blockSize && player.pos.x <= 10.13f * blockSize) {
+			if (map[int(player.pos.y / 32)][int(player.pos.x / 32 - 0.13f)] == 1) {
 				player.move.x += 1.0f;
 			}
 		}
 
 		if (keys[DIK_D] || keys[DIK_RIGHT]) {
 			player.move.x += 1.0f;
-			if (player.pos.y == 18 * blockSize && player.pos.x + player.width >= 33.9f * blockSize ||
-				player.pos.y == 17 * blockSize && player.pos.x + player.width >= 31.9f * blockSize ||
-				player.pos.y == 16 * blockSize && player.pos.x + player.width >= 29.8f * blockSize) {
+			if (map[int(player.pos.y / 32)][int(player.pos.x / 32 + 1.13f)] == 1) {
 				player.move.x -= 1.0f;
 			}
 		}
@@ -451,6 +440,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//ボールの位置に速度を足す
 		player.pos.x -= player.velocity.x;
 		player.pos.y -= player.velocity.y;
+
 
 		if (player.pos.y >= player.height + blockNum * blockSize) {
 			player.pos.y = player.height + blockNum * blockSize;
@@ -542,6 +532,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Novice::ScreenPrintf(0, 160, "player.leftBottom.y %.1f", player.leftBottom.y);
 		Novice::ScreenPrintf(0, 180, "player.rightBottom.x %.1f", player.rightBottom.x);
 		Novice::ScreenPrintf(0, 200, "player.rightBottom.y %.1f", player.rightBottom.y);
+		Novice::ScreenPrintf(0, 220, "blockNum %d", blockNum);
 
 
 		///
