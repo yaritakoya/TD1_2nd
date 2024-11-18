@@ -126,6 +126,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	int block1 = Novice::LoadTexture("./Resources/block_1.png");//地面ブロック
 	int block2 = Novice::LoadTexture("./Resources/block_2.png");//浮いてるブロック
+	//kint Bullet = Novice::LoadTexture("./Resources/Bullet.png");//
+	//kint Bullet = Novice::LoadTexture("./Resources/Bullet.png");//
+
+
 
 	int blockSize = 32;
 	int blockNum = 0;
@@ -464,14 +468,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (player.pos.x >= 6 * blockSize && player.pos.x < 8 * blockSize ||
 			player.pos.x + player.width >= 32 * blockSize && player.pos.x + player.width < 34 * blockSize) {
 			blockNum = 17;
-			
+
 
 		}
 
 		if (player.pos.x >= 8 * blockSize && player.pos.x < 10 * blockSize ||
 			player.pos.x + player.width >= 30 * blockSize && player.pos.x + player.width < 32 * blockSize) {
 			blockNum = 18;
-		
+
 
 		}
 
@@ -661,15 +665,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				static_cast<int>(player.pos.x), static_cast<int>(player.pos.y),
 				static_cast<int>(player.width), static_cast<int>(player.height),
 				0.0f, WHITE, kFillModeSolid);
-		} else if(player.lifeCount >= 0) {
-			
+		}
+		else if (player.lifeCount >= 0) {
+
 			if (player.lifeCount % 10 == 0) {
 				Novice::DrawBox(
 					static_cast<int>(player.pos.x), static_cast<int>(player.pos.y),
 					static_cast<int>(player.width), static_cast<int>(player.height),
 					0.0f, RED, kFillModeSolid);
 			}
-			
+
 		}
 		//デバッグ用の描画
 		Novice::ScreenPrintf(0, 0, "player.pos.x %.1f", player.pos.x);
