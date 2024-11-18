@@ -639,7 +639,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					1.0f, RED, kFillModeSolid);
 			}
 		}
-		/*for (int i = 0; i < maxBullet; i++) {
+		
+/*for (int i = 0; i < maxBullet; i++) {
 			Novice::ScreenPrintf(0, i * 17, "posxVertical%disAlive%d\n\n", static_cast<int>(bulletVertical[i].pos.x), bulletVertical[i].isAlive);
 			Novice::ScreenPrintf(0, 102 + i * 17, "posyVertical%d isAlive%d\n\n", static_cast<int>(bulletVertical[i].pos.y), bulletVertical[i].isAlive);
 			Novice::ScreenPrintf(0, 204 + i * 17, "posxBeside%d isAlive%d\n\n", static_cast<int>(bulletBeside[i].pos.x), bulletBeside[i].isAlive);
@@ -647,7 +648,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			Novice::ScreenPrintf(0, 425 + i * 17, "posxDiagonal%d isAlive%d\n\n", static_cast<int>(bulletDiagonal[i].pos.x), bulletDiagonal[i].isAlive);
 			Novice::ScreenPrintf(0, 527 + i * 17, "posyDiagonal%d isAlive%d", static_cast<int>(bulletDiagonal[i].pos.y), bulletDiagonal[i].isAlive);
 		}*/
-
 
 		for (int y = 0; y < 23; y++) {
 			for (int x = 0; x < 40; x++) {
