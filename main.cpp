@@ -375,6 +375,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				(map[int(player.pos.y / 32 + 1)][int((player.pos.x + player.width) / 32)] == 2 && player.pos.y >= 13 * blockSize)) {
 				blockNum = 13;
 				player.velocity.y = 0.0f;
+				if (keys[DIK_S] && keys[DIK_SPACE]) {
+					blockNum = 15;
+					player.pos.y = float(blockNum * 32);
+				}
 			}
 
 			//上
@@ -382,6 +386,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				(map[int(player.pos.y / 32 + 1)][int((player.pos.x + player.width) / 32)] == 2 && player.pos.y <= 7 * blockSize)) {
 				blockNum = 5;
 				player.velocity.y = 0.0f;
+				if (keys[DIK_S] && keys[DIK_SPACE]) {
+					blockNum = 7;
+					player.pos.y = float(blockNum * 32);
+				}
 			}
 
 			//真ん中
@@ -389,6 +397,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				(map[int(player.pos.y / 32 + 1)][int((player.pos.x + player.width) / 32)] == 2 && player.pos.y <= 11 * blockSize)) {
 				blockNum = 9;
 				player.velocity.y = 0.0f;
+				if (keys[DIK_S] && keys[DIK_SPACE]) {
+					blockNum = 11;
+					player.pos.y = float(blockNum * 32);
+				}
 			}
 #pragma endregion
 
@@ -513,6 +525,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
+
+		for (int y = 0; y < 23; y++) {
+			for (int x = 0; x < 40; x++) {
+				if (map[y][x] == 1) {
+					Novice::DrawSprite(x * 32, y * 32, block1, 1.0f, 1.0f, 0.0f, WHITE);
+				}
+				if (map[y][x] == 2) {
+					Novice::DrawSprite(x * 32, y * 32, block2, 1.0f, 1.0f, 0.0f, WHITE);
+
 		if (scene == GAMESCENE)
 		{
 			for (int i = 0; i < maxBullet; i++) {
@@ -566,8 +587,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (map[y][x] == 2) {
 						Novice::DrawSprite(x * blockSize, y * blockSize, block2, 1.0f, 1.0f, 0.0f, WHITE);
 					}
+
 				}
 			}
+
 
 
 			Novice::DrawBox(
