@@ -525,6 +525,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
+
+		for (int y = 0; y < 23; y++) {
+			for (int x = 0; x < 40; x++) {
+				if (map[y][x] == 1) {
+					Novice::DrawSprite(x * 32, y * 32, block1, 1.0f, 1.0f, 0.0f, WHITE);
+				}
+				if (map[y][x] == 2) {
+					Novice::DrawSprite(x * 32, y * 32, block2, 1.0f, 1.0f, 0.0f, WHITE);
+
 		if (scene == GAMESCENE)
 		{
 			for (int i = 0; i < maxBullet; i++) {
@@ -578,8 +587,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (map[y][x] == 2) {
 						Novice::DrawSprite(x * blockSize, y * blockSize, block2, 1.0f, 1.0f, 0.0f, WHITE);
 					}
+
 				}
 			}
+
 
 
 			Novice::DrawBox(
