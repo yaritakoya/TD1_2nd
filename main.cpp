@@ -156,17 +156,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
-		for (int y = 0; y < 23; y++){
-			for (int x = 0; x < 40; x++){
+		for (int y = 0; y < 23; y++) {
+			for (int x = 0; x < 40; x++) {
 				if (map[y][x] == 1) {
 					Novice::DrawSprite(x * 32, y * 32, block1, 1.0f, 1.0f, 0.0f, WHITE);
 				}
-				if (map[y][x]==2){
+				if (map[y][x] == 2) {
 					Novice::DrawSprite(x * 32, y * 32, block2, 1.0f, 1.0f, 0.0f, WHITE);
 				}
 			}
 		}
-
 
 		Novice::DrawEllipse(
 			static_cast<int>(ball.pos.x), static_cast<int>(ball.pos.y * -1 + 620.0f),
