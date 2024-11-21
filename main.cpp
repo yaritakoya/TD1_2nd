@@ -126,7 +126,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	int block1 = Novice::LoadTexture("./Resources/block_1.png");//地面ブロック
 	int block2 = Novice::LoadTexture("./Resources/block_2.png");//浮いてるブロック
-	//int Bullet = Novice::LoadTexture("./Resources/Bullet.png");//
+	int Bullet = Novice::LoadTexture("./Resources/Bullet.png");//
 	//kint Bullet = Novice::LoadTexture("./Resources/Bullet.png");//
 
 
@@ -179,7 +179,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	player.jumpCount = 0;
 	player.rect = 100;
 	player.moveSpeed = 5;
-	player.radius = 32.0f;
+	player.radius = 25.0f;
 	player.isHit = true;
 	player.lifeCount = 200;
 
@@ -609,40 +609,40 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		for (int i = 0; i < maxBullet; i++) {
 			if (bulletVertical[i].isHit == true) {
 				/*bullet[i].pos.y = 100.0f + i * 80.0f;*/
-				/*Novice::DrawSprite(
-					static_cast<int>(bulletVertical[i].pos.x), static_cast<int>(bulletVertical[i].pos.y),
-					Bullet, 1.0f, 1.0f, 0.0f, WHITE);*/
+				Novice::DrawSprite(
+					static_cast<int>(bulletVertical[i].pos.x-25), static_cast<int>(bulletVertical[i].pos.y-25),
+					Bullet, 1.0f, 1.0f, 0.0f, WHITE);
 
 
-				Novice::DrawEllipse(
+				/*Novice::DrawEllipse(
 					static_cast<int>(bulletVertical[i].pos.x), static_cast<int>(bulletVertical[i].pos.y),
 					static_cast<int>(bulletVertical[i].radius), static_cast<int>(bulletVertical[i].radius),
-					1.0f, RED, kFillModeSolid);
+					1.0f, RED, kFillModeSolid);*/
 			}
 			if (bulletBeside[i].isHit == true) {
 				/*bullet[i].pos.y = 100.0f + i * 80.0f;*/
-				/*Novice::DrawSprite(
-					static_cast<int>(bulletBeside[i].pos.x), static_cast<int>(bulletBeside[i].pos.y),
-					Bullet, 1.0f, 1.0f, 0.0f, WHITE);*/
+				Novice::DrawSprite(
+					static_cast<int>(bulletBeside[i].pos.x-25), static_cast<int>(bulletBeside[i].pos.y-25),
+					Bullet, 1.0f, 1.0f, 0.0f, WHITE);
 
 
 
-				Novice::DrawEllipse(
+				/*Novice::DrawEllipse(
 					static_cast<int>(bulletBeside[i].pos.x), static_cast<int>(bulletBeside[i].pos.y),
 					static_cast<int>(bulletBeside[i].radius), static_cast<int>(bulletBeside[i].radius),
-					1.0f, RED, kFillModeSolid);
+					1.0f, RED, kFillModeSolid);*/
 			}
 			if (bulletDiagonal[i].isHit == true) {
 				/*bullet[i].pos.y = 100.0f + i * 80.0f;*/
-				/*Novice::DrawSprite(
-					static_cast<int>(bulletDiagonal[i].pos.x), static_cast<int>(bulletDiagonal[i].pos.y),
-					Bullet, 1.0f, 1.0f, 0.0f, WHITE);*/
+				Novice::DrawSprite(
+					static_cast<int>(bulletDiagonal[i].pos.x-25), static_cast<int>(bulletDiagonal[i].pos.y-25),
+					Bullet, 1.0f, 1.0f, 0.0f, WHITE);
 
 
-				Novice::DrawEllipse(
+				/*Novice::DrawEllipse(
 					static_cast<int>(bulletDiagonal[i].pos.x), static_cast<int>(bulletDiagonal[i].pos.y),
 					static_cast<int>(bulletDiagonal[i].radius), static_cast<int>(bulletDiagonal[i].radius),
-					1.0f, RED, kFillModeSolid);
+					1.0f, RED, kFillModeSolid);*/
 			}
 		}
 		
