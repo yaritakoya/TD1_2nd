@@ -533,7 +533,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 				if (map[y][x] == 2) {
 					Novice::DrawSprite(x * 32, y * 32, block2, 1.0f, 1.0f, 0.0f, WHITE);
-
+				}
+			}
+		}
 		if (scene == GAMESCENE)
 		{
 			for (int i = 0; i < maxBullet; i++) {
