@@ -178,7 +178,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	};
 
 
-	Player player;
+	Player player{};
 	player.pos = { 64.0f,636.0f };
 	player.prePos = { 0.0f,0.0f };
 	player.mapPos = { 0.0f,0.0f };
@@ -830,7 +830,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}*/
 
 
-		for (int y = 0; y < 23; y++) {
+		/*for (int y = 0; y < 23; y++) {
 			for (int x = 0; x < 40; x++) {
 				if (map[y][x] == 1) {
 					Novice::DrawSprite(x * blockSize, y * blockSize, block1, 1.0f, 1.0f, 0.0f, WHITE);
@@ -840,7 +840,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 
 			}
-		}
+		}*/
 
 		if (player.isHit == true) {
 			Novice::DrawBox(
