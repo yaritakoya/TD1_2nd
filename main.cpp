@@ -178,7 +178,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	};
 
 
-	Player player;
+	Player player{};
 	player.pos = { 64.0f,636.0f };
 	player.prePos = { 0.0f,0.0f };
 	player.mapPos = { 0.0f,0.0f };
@@ -230,90 +230,45 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma region bullet
 
-			for (int i = 0; i < maxBullet; i++) {
-				//回転
-				bulletVertical[i].theta = (6.0f - i) / 12.0f * float(M_PI);//1/6～8/6の角度
-				bulletVertical[i].move.x = cosf(bulletVertical[i].theta) - sinf(bulletVertical[i].theta);
-				bulletVertical[i].move.y = sinf(bulletVertical[i].theta) + cosf(bulletVertical[i].theta);
-				if (bulletVertical[i].isHit == true) {
-					//正規化
-					bulletVertical[i].length = sqrtf(bulletVertical[i].move.x * bulletVertical[i].move.x + bulletVertical[i].move.y * bulletVertical[i].move.y);
+			if (bullretVerticalCount < 6) {
 
-					if (bulletVertical[i].length >= 1.0f) {
-						bulletVertical[i].move.x /= bulletVertical[i].length;
-						bulletVertical[i].move.y /= bulletVertical[i].length;
-						bulletVertical[i].pos.x += bulletVertical[i].move.x;
-						bulletVertical[i].pos.y += bulletVertical[i].move.y;
-					}
-				}
-				if (bulletVertical[i].pos.x <= 0.0f || bulletVertical[i].pos.y <= 0.0f || bulletVertical[i].pos.y >= 720.0f || bulletVertical[i].pos.x >= 1280.0f) {
-					bulletVertical[i].isHit = false;
-					bulletVertical[i].pos = bulletVertical[i].fixedPos;
-					bullretVerticalCount++;
-					if (bullretVerticalCount == maxBullet) {
-						bulletVertical[i].isHit = true;
-						bullretVerticalCount = 0.0f;
-						for (int j = 0; j < maxBullet; j++) {
-							bulletVertical[j].pos = { 640.0f,30.0f };
-							bulletVertical[j].prePoint;
-							bulletVertical[j].fixedPos = { 640.0f,30.0f };
-							bulletVertical[j].move;
-							bulletVertical[j].radius = 30.0f;
-							bulletVertical[j].speed = 10.0f;
-							bulletVertical[j].velocity = 10.0f;
-							bulletVertical[j].isHit = true;
-							bulletVertical[j].length = 0.0f;
-							bulletVertical[j].theta = 0.0f;
-							bulletVertical[j].coolTime = 30.0f;
-						}
+				for (int i = 0; i < maxBullet; i++) {
 
-					}
-				}
-			}
-		}
-
-		//横散弾
-		if (bullretBesideCount < 6) {
-			for (int i = 0; i < maxBullet; i++) {
-				if (coolTimeBeside % 1 == 0) {
 					//回転
-					bulletBeside[i].theta = (10.0f - i) / 12.0f * float(M_PI);//1/6～8/6の角度
-					bulletBeside[i].move.x = cosf(bulletBeside[i].theta) - sinf(bulletBeside[i].theta);
-					bulletBeside[i].move.y = sinf(bulletBeside[i].theta) + cosf(bulletBeside[i].theta);
-					if (bulletBeside[i].isHit == true) {
+					bulletVertical[i].theta = (6.0f - i) / 12.0f * float(M_PI);//1/6～8/6の角度
+					bulletVertical[i].move.x = cosf(bulletVertical[i].theta) - sinf(bulletVertical[i].theta);
+					bulletVertical[i].move.y = sinf(bulletVertical[i].theta) + cosf(bulletVertical[i].theta);
+					if (bulletVertical[i].isHit == true) {
+						//正規化
+						bulletVertical[i].length = sqrtf(bulletVertical[i].move.x * bulletVertical[i].move.x + bulletVertical[i].move.y * bulletVertical[i].move.y);
 
-						////正規化
-						bulletBeside[i].length = sqrtf(bulletBeside[i].move.x * bulletBeside[i].move.x + bulletBeside[i].move.y * bulletBeside[i].move.y);
-
-						if (bulletBeside[i].length >= 1.0f) {
-							bulletBeside[i].move.x /= bulletBeside[i].length;
-							bulletBeside[i].move.y /= bulletBeside[i].length;
-							bulletBeside[i].pos.x += bulletBeside[i].move.x;
-							bulletBeside[i].pos.y += bulletBeside[i].move.y;
+						if (bulletVertical[i].length >= 1.0f) {
+							bulletVertical[i].move.x /= bulletVertical[i].length;
+							bulletVertical[i].move.y /= bulletVertical[i].length;
+							bulletVertical[i].pos.x += bulletVertical[i].move.x * (bulletVertical[i].speed + rand() % 9 + 1);
+							bulletVertical[i].pos.y += bulletVertical[i].move.y * (bulletVertical[i].speed + rand() % 13 + 1);
 						}
 					}
-					if (bulletBeside[i].pos.x < 0.0f || bulletBeside[i].pos.x > 1280.0f || bulletBeside[i].pos.y < 0.0f || bulletBeside[i].pos.y > 720.0f) {
-						bulletBeside[i].isHit = false;
-						bulletBeside[i].pos = bulletBeside[i].fixedPos;
-						bullretBesideCount++;
-
-						if (bullretBesideCount == maxBullet) {
-							bulletBeside[i].isHit = true;
-							bullretBesideCount = 0;
+					if (bulletVertical[i].pos.x <= 0.0f || bulletVertical[i].pos.y <= 0.0f || bulletVertical[i].pos.y >= 720.0f || bulletVertical[i].pos.x >= 1280.0f) {
+						bulletVertical[i].isHit = false;
+						bulletVertical[i].pos = bulletVertical[i].fixedPos;
+						bullretVerticalCount++;
+						if (bullretVerticalCount == maxBullet) {
+							bulletVertical[i].isHit = true;
+							bullretVerticalCount = 0.0f;
 							for (int j = 0; j < maxBullet; j++) {
-								bulletBeside[j].pos = { 1200.0f,360.0f };
-								bulletBeside[j].prePoint;
-								bulletBeside[j].fixedPos = { 1200.0f,360.0f };
-								bulletBeside[j].move;
-								bulletBeside[j].radius = 30.0f;
-								bulletBeside[j].speed = 10.0f;
-								bulletBeside[j].velocity = 10.0f;
-								bulletBeside[j].isHit = true;
-								bulletBeside[j].length = 0.0f;
-								bulletBeside[j].theta = 0.0f;
-								bulletBeside[j].coolTime = 30.0f;
-
-
+								bulletVertical[j].pos = { 640.0f,30.0f };
+								bulletVertical[j].prePoint;
+								bulletVertical[j].fixedPos = { 640.0f,30.0f };
+								bulletVertical[j].move;
+								bulletVertical[j].radius = 30.0f;
+								bulletVertical[j].speed = 0.0f;
+								bulletVertical[j].velocity = 10.0f;
+								bulletVertical[j].isHit = true;
+								bulletVertical[j].length = 0.0f;
+								bulletVertical[j].theta = 0.0f;
+								bulletVertical[j].coolTime = 30.0f;
+								bulletVertical[i].pos.x = static_cast<float>(rand() % 1280 + 1);
 							}
 
 						}
@@ -337,8 +292,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 							if (bulletBeside[i].length >= 1.0f) {
 								bulletBeside[i].move.x /= bulletBeside[i].length;
 								bulletBeside[i].move.y /= bulletBeside[i].length;
-								bulletBeside[i].pos.x += bulletBeside[i].move.x;
-								bulletBeside[i].pos.y += bulletBeside[i].move.y;
+								bulletBeside[i].pos.x += bulletBeside[i].move.x * (bulletBeside[i].speed + rand() % 9 + 1);
+								bulletBeside[i].pos.y += bulletBeside[i].move.y * (bulletBeside[i].speed + rand() % 13 + 1);
 							}
 						}
 						if (bulletBeside[i].pos.x < 0.0f || bulletBeside[i].pos.x > 1280.0f || bulletBeside[i].pos.y < 0.0f || bulletBeside[i].pos.y > 720.0f) {
@@ -355,7 +310,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 									bulletBeside[j].fixedPos = { 1200.0f,360.0f };
 									bulletBeside[j].move;
 									bulletBeside[j].radius = 30.0f;
-									bulletBeside[j].speed = 10.0f;
+									bulletBeside[j].speed = 0.0f;
 									bulletBeside[j].velocity = 10.0f;
 									bulletBeside[j].isHit = true;
 									bulletBeside[j].length = 0.0f;
@@ -389,8 +344,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						if (bulletDiagonal[i].length >= 1.0f) {
 							bulletDiagonal[i].move.x /= bulletDiagonal[i].length;
 							bulletDiagonal[i].move.y /= bulletDiagonal[i].length;
-							bulletDiagonal[i].pos.x += bulletDiagonal[i].move.x;
-							bulletDiagonal[i].pos.y += bulletDiagonal[i].move.y;
+							bulletDiagonal[i].pos.x += bulletDiagonal[i].move.x * (bulletDiagonal[i].speed + rand() % 9 + 1);
+							bulletDiagonal[i].pos.y += bulletDiagonal[i].move.y * (bulletDiagonal[i].speed + rand() % 13 + 1);
 						}
 					}
 					if (bulletDiagonal[i].pos.x <= 0.0f || bulletDiagonal[i].pos.y <= 0.0f || bulletDiagonal[i].pos.y >= 720.0f || bulletDiagonal[i].pos.x >= 1280.0f) {
@@ -406,21 +361,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 								bulletDiagonal[j].fixedPos = { 1250.0f,30.0f };
 								bulletDiagonal[j].move;
 								bulletDiagonal[j].radius = 30.0f;
-								bulletDiagonal[j].speed = 10.0f;
+								bulletDiagonal[j].speed = 0.0f;
 								bulletDiagonal[j].velocity = 10.0f;
 								bulletDiagonal[j].isHit = true;
 								bulletDiagonal[j].length = 0.0f;
 								bulletDiagonal[j].theta = 0.0f;
 								bulletDiagonal[j].coolTime = 30.0f;
-
-
 							}
+
 						}
 					}
 				}
 			}
-#pragma endregion
-
 
 #pragma endregion
 #pragma region 弾の当たり判定
@@ -595,7 +547,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				player.velocity.y = 0.0f;
 
 			}
-
 #pragma endregion
 
 
@@ -721,13 +672,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 
-		///
-		/// ↑更新処理ここまで
-		///
+			///
+			/// ↑更新処理ここまで
+			///
 
-		///
-		/// ↓描画処理ここから
-		///
+			///
+			/// ↓描画処理ここから
+			///
 
 
 
@@ -841,12 +792,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		} else if (player.lifeCount >= 0) {
 
 
-			if (player.lifeCount % 10 == 0) {
-				Novice::DrawBox(
-					static_cast<int>(player.pos.x), static_cast<int>(player.pos.y),
-					static_cast<int>(player.width), static_cast<int>(player.height),
-					0.0f, RED, kFillModeSolid);
-			}
+				if (player.lifeCount % 10 == 0) {
+					Novice::DrawBox(
+						static_cast<int>(player.pos.x), static_cast<int>(player.pos.y),
+						static_cast<int>(player.width), static_cast<int>(player.height),
+						0.0f, RED, kFillModeSolid);
+				}
 
 		}
 		//デバッグ用の描画
@@ -878,13 +829,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 // フレームの終了
 		Novice::EndFrame();
 
-		// ESCキーが押されたらループを抜ける
-		if (preKeys[DIK_ESCAPE] == 0 && keys[DIK_ESCAPE] != 0) {
-			break;
+			// ESCキーが押されたらループを抜ける
+			if (preKeys[DIK_ESCAPE] == 0 && keys[DIK_ESCAPE] != 0) {
+				break;
+			}
 		}
-	}
 
-	// ライブラリの終了
-	Novice::Finalize();
-	return 0;
-}
+		// ライブラリの終了
+		Novice::Finalize();
+		return 0;
+	}
