@@ -534,84 +534,88 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				if (map[y][x] == 2) {
 					Novice::DrawSprite(x * 32, y * 32, block2, 1.0f, 1.0f, 0.0f, WHITE);
 
-		if (scene == GAMESCENE)
-		{
-			for (int i = 0; i < maxBullet; i++) {
-				if (bulletVertical[i].isAlive == true) {
-					/*bullet[i].pos.y = 100.0f + i * 80.0f;*/
+					if (scene == GAMESCENE)
+					{
+						for (int i = 0; i < maxBullet; i++) {
+							if (bulletVertical[i].isAlive == true) {
+								/*bullet[i].pos.y = 100.0f + i * 80.0f;*/
 
 
 
-					Novice::DrawEllipse(
-						static_cast<int>(bulletVertical[i].pos.x), static_cast<int>(bulletVertical[i].pos.y),
-						static_cast<int>(bulletVertical[i].radius), static_cast<int>(bulletVertical[i].radius),
-						1.0f, RED, kFillModeSolid);
-				}
-				if (bulletBeside[i].isAlive == true) {
-					/*bullet[i].pos.y = 100.0f + i * 80.0f;*/
+								Novice::DrawEllipse(
+									static_cast<int>(bulletVertical[i].pos.x), static_cast<int>(bulletVertical[i].pos.y),
+									static_cast<int>(bulletVertical[i].radius), static_cast<int>(bulletVertical[i].radius),
+									1.0f, RED, kFillModeSolid);
+							}
+							if (bulletBeside[i].isAlive == true) {
+								/*bullet[i].pos.y = 100.0f + i * 80.0f;*/
 
 
 
 
-					Novice::DrawEllipse(
-						static_cast<int>(bulletBeside[i].pos.x), static_cast<int>(bulletBeside[i].pos.y),
-						static_cast<int>(bulletBeside[i].radius), static_cast<int>(bulletBeside[i].radius),
-						1.0f, RED, kFillModeSolid);
-				}
-				if (bulletDiagonal[i].isAlive == true) {
-					/*bullet[i].pos.y = 100.0f + i * 80.0f;*/
+								Novice::DrawEllipse(
+									static_cast<int>(bulletBeside[i].pos.x), static_cast<int>(bulletBeside[i].pos.y),
+									static_cast<int>(bulletBeside[i].radius), static_cast<int>(bulletBeside[i].radius),
+									1.0f, RED, kFillModeSolid);
+							}
+							if (bulletDiagonal[i].isAlive == true) {
+								/*bullet[i].pos.y = 100.0f + i * 80.0f;*/
 
 
 
-					Novice::DrawEllipse(
-						static_cast<int>(bulletDiagonal[i].pos.x), static_cast<int>(bulletDiagonal[i].pos.y),
-						static_cast<int>(bulletDiagonal[i].radius), static_cast<int>(bulletDiagonal[i].radius),
-						1.0f, RED, kFillModeSolid);
+								Novice::DrawEllipse(
+									static_cast<int>(bulletDiagonal[i].pos.x), static_cast<int>(bulletDiagonal[i].pos.y),
+									static_cast<int>(bulletDiagonal[i].radius), static_cast<int>(bulletDiagonal[i].radius),
+									1.0f, RED, kFillModeSolid);
+							}
+						}
+					}
 				}
 			}
-			/*for (int i = 0; i < maxBullet; i++) {
-				Novice::ScreenPrintf(0, i * 17, "posxVertical%disAlive%d\n\n", static_cast<int>(bulletVertical[i].pos.x), bulletVertical[i].isAlive);
-				Novice::ScreenPrintf(0, 102 + i * 17, "posyVertical%d isAlive%d\n\n", static_cast<int>(bulletVertical[i].pos.y), bulletVertical[i].isAlive);
-				Novice::ScreenPrintf(0, 204 + i * 17, "posxBeside%d isAlive%d\n\n", static_cast<int>(bulletBeside[i].pos.x), bulletBeside[i].isAlive);
-				Novice::ScreenPrintf(0, 306 + i * 17, "posyBeside%d isAlive%d", static_cast<int>(bulletBeside[i].pos.y), bulletBeside[i].isAlive);
-				Novice::ScreenPrintf(0, 425 + i * 17, "posxDiagonal%d isAlive%d\n\n", static_cast<int>(bulletDiagonal[i].pos.x), bulletDiagonal[i].isAlive);
-				Novice::ScreenPrintf(0, 527 + i * 17, "posyDiagonal%d isAlive%d", static_cast<int>(bulletDiagonal[i].pos.y), bulletDiagonal[i].isAlive);
-			}*/
-
-
-			for (int y = 0; y < 23; y++) {
-				for (int x = 0; x < 40; x++) {
-					if (map[y][x] == 1) {
-						Novice::DrawSprite(x * blockSize, y * blockSize, block1, 1.0f, 1.0f, 0.0f, WHITE);
-					}
-					if (map[y][x] == 2) {
-						Novice::DrawSprite(x * blockSize, y * blockSize, block2, 1.0f, 1.0f, 0.0f, WHITE);
-					}
-
-				}
-			}
-
-
-
-			Novice::DrawBox(
-				static_cast<int>(player.pos.x), static_cast<int>(player.pos.y),
-				static_cast<int>(player.width), static_cast<int>(player.height),
-				0.0f, WHITE, kFillModeSolid);
-
-			//デバッグ用の描画
-			Novice::ScreenPrintf(0, 0, "player.pos.x %.1f", player.pos.x);
-			Novice::ScreenPrintf(0, 20, "player.pos.y %.1f", player.pos.y);
-			Novice::ScreenPrintf(0, 40, "ball.height %.1f", player.height);
-			Novice::ScreenPrintf(0, 60, "player.leftTop.x %.1f", player.leftTop.x);
-			Novice::ScreenPrintf(0, 80, "player.leftTop.y %.1f", player.leftTop.y);
-			Novice::ScreenPrintf(0, 100, "player.rightTop.x %.1f", player.rightTop.x);
-			Novice::ScreenPrintf(0, 120, "player.rightTop.y %.1f", player.rightTop.y);
-			Novice::ScreenPrintf(0, 140, "player.leftBottom.x %.1f", player.leftBottom.x);
-			Novice::ScreenPrintf(0, 160, "player.leftBottom.y %.1f", player.leftBottom.y);
-			Novice::ScreenPrintf(0, 180, "player.rightBottom.x %.1f", player.rightBottom.x);
-			Novice::ScreenPrintf(0, 200, "player.rightBottom.y %.1f", player.rightBottom.y);
-			Novice::ScreenPrintf(0, 220, "blockNum %d", blockNum);
 		}
+		/*for (int i = 0; i < maxBullet; i++) {
+			Novice::ScreenPrintf(0, i * 17, "posxVertical%disAlive%d\n\n", static_cast<int>(bulletVertical[i].pos.x), bulletVertical[i].isAlive);
+			Novice::ScreenPrintf(0, 102 + i * 17, "posyVertical%d isAlive%d\n\n", static_cast<int>(bulletVertical[i].pos.y), bulletVertical[i].isAlive);
+			Novice::ScreenPrintf(0, 204 + i * 17, "posxBeside%d isAlive%d\n\n", static_cast<int>(bulletBeside[i].pos.x), bulletBeside[i].isAlive);
+			Novice::ScreenPrintf(0, 306 + i * 17, "posyBeside%d isAlive%d", static_cast<int>(bulletBeside[i].pos.y), bulletBeside[i].isAlive);
+			Novice::ScreenPrintf(0, 425 + i * 17, "posxDiagonal%d isAlive%d\n\n", static_cast<int>(bulletDiagonal[i].pos.x), bulletDiagonal[i].isAlive);
+			Novice::ScreenPrintf(0, 527 + i * 17, "posyDiagonal%d isAlive%d", static_cast<int>(bulletDiagonal[i].pos.y), bulletDiagonal[i].isAlive);
+		}*/
+
+
+		for (int y = 0; y < 23; y++) {
+			for (int x = 0; x < 40; x++) {
+				if (map[y][x] == 1) {
+					Novice::DrawSprite(x * blockSize, y * blockSize, block1, 1.0f, 1.0f, 0.0f, WHITE);
+				}
+				if (map[y][x] == 2) {
+					Novice::DrawSprite(x * blockSize, y * blockSize, block2, 1.0f, 1.0f, 0.0f, WHITE);
+				}
+
+			}
+		}
+
+
+
+		Novice::DrawBox(
+			static_cast<int>(player.pos.x), static_cast<int>(player.pos.y),
+			static_cast<int>(player.width), static_cast<int>(player.height),
+			0.0f, WHITE, kFillModeSolid);
+
+		//デバッグ用の描画
+		Novice::ScreenPrintf(0, 0, "player.pos.x %.1f", player.pos.x);
+		Novice::ScreenPrintf(0, 20, "player.pos.y %.1f", player.pos.y);
+		Novice::ScreenPrintf(0, 40, "ball.height %.1f", player.height);
+		Novice::ScreenPrintf(0, 60, "player.leftTop.x %.1f", player.leftTop.x);
+		Novice::ScreenPrintf(0, 80, "player.leftTop.y %.1f", player.leftTop.y);
+		Novice::ScreenPrintf(0, 100, "player.rightTop.x %.1f", player.rightTop.x);
+		Novice::ScreenPrintf(0, 120, "player.rightTop.y %.1f", player.rightTop.y);
+		Novice::ScreenPrintf(0, 140, "player.leftBottom.x %.1f", player.leftBottom.x);
+		Novice::ScreenPrintf(0, 160, "player.leftBottom.y %.1f", player.leftBottom.y);
+		Novice::ScreenPrintf(0, 180, "player.rightBottom.x %.1f", player.rightBottom.x);
+		Novice::ScreenPrintf(0, 200, "player.rightBottom.y %.1f", player.rightBottom.y);
+		Novice::ScreenPrintf(0, 220, "blockNum %d", blockNum);
+
 
 
 		///
