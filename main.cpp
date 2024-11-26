@@ -64,6 +64,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	char keys[256] = { 0 };
 	char preKeys[256] = { 0 };
 
+	enum Scene {
+		TITLE,
+		EXPLAIN,
+		GAMESCENE,
+		GAMEOVER,
+		CLEAR
+	};
+	int scene = GAMESCENE;
+
 	//Bullet
 	const int maxBullet = 6;
 
@@ -81,6 +90,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		bulletBeside[i].length = 0.0f;
 		bulletBeside[i].theta = 0.0f;
 		bulletBeside[i].coolTime = 30.0f;
+
 		bulletBeside[i].distance;
 	}
 
@@ -101,6 +111,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		bulletVertical[i].distance;
 	}
 
+
+	
+
+
+
 	//斜め
 	Bullet bulletDiagonal[maxBullet] = {};
 	for (int i = 0; i < maxBullet; i++) {
@@ -116,6 +131,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		bulletDiagonal[i].theta = 0.0f;
 		bulletDiagonal[i].coolTime = 30.0f;
 		bulletDiagonal[i].distance;
+
 	}
 
 	/*int coolTimeVertical = 30;*/
@@ -161,7 +177,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	};
 
-	Player player{};
+
+	Player player;
 	player.pos = { 64.0f,636.0f };
 	player.prePos = { 0.0f,0.0f };
 	player.mapPos = { 0.0f,0.0f };
@@ -204,11 +221,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓更新処理ここから
 		///
 
+
+
+
+		if (scene == GAMESCENE)
+		{
+
+
 #pragma region bullet
 
-		//縦散弾
-		if (bullretVerticalCount < 6) {
-			for (int i = 0; i < maxBullet; i++) {
 
 				//回転
 				bulletVertical[i].theta = (6.0f - i) / 12.0f * float(M_PI);//1/6～8/6の角度
@@ -292,13 +313,62 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 								bulletBeside[j].theta = 0.0f;
 								bulletBeside[j].coolTime = 30.0f;
 
+
 							}
+
 						}
 					}
-
 				}
+			}
 
-				coolTimeBeside++;
+			//横散弾
+			if (bullretBesideCount < 6) {
+				for (int i = 0; i < maxBullet; i++) {
+					if (coolTimeBeside % 1 == 0) {
+						//回転
+						bulletBeside[i].theta = (10.0f - i) / 12.0f * float(M_PI);//1/6～8/6の角度
+						bulletBeside[i].move.x = cosf(bulletBeside[i].theta) - sinf(bulletBeside[i].theta);
+						bulletBeside[i].move.y = sinf(bulletBeside[i].theta) + cosf(bulletBeside[i].theta);
+						if (bulletBeside[i].isAlive == true) {
+
+							////正規化
+							bulletBeside[i].length = sqrtf(bulletBeside[i].move.x * bulletBeside[i].move.x + bulletBeside[i].move.y * bulletBeside[i].move.y);
+
+							if (bulletBeside[i].length >= 1.0f) {
+								bulletBeside[i].move.x /= bulletBeside[i].length;
+								bulletBeside[i].move.y /= bulletBeside[i].length;
+								bulletBeside[i].pos.x += bulletBeside[i].move.x;
+								bulletBeside[i].pos.y += bulletBeside[i].move.y;
+							}
+						}
+						if (bulletBeside[i].pos.x < 0.0f || bulletBeside[i].pos.x > 1280.0f || bulletBeside[i].pos.y < 0.0f || bulletBeside[i].pos.y > 720.0f) {
+							bulletBeside[i].isAlive = false;
+							bulletBeside[i].pos = bulletBeside[i].fixedPos;
+							bullretBesideCount++;
+
+							if (bullretBesideCount == maxBullet) {
+								bulletBeside[i].isAlive = true;
+								bullretBesideCount = 0;
+								for (int j = 0; j < maxBullet; j++) {
+									bulletBeside[j].pos = { 1200.0f,360.0f };
+									bulletBeside[j].prePoint;
+									bulletBeside[j].fixedPos = { 1200.0f,360.0f };
+									bulletBeside[j].move;
+									bulletBeside[j].radius = 30.0f;
+									bulletBeside[j].speed = 10.0f;
+									bulletBeside[j].velocity = 10.0f;
+									bulletBeside[j].isAlive = true;
+									bulletBeside[j].length = 0.0f;
+									bulletBeside[j].theta = 0.0f;
+									bulletBeside[j].coolTime = 30.0f;
+
+								}
+							}
+						}
+
+					}
+
+					coolTimeBeside++;
 
 
 			}
@@ -342,12 +412,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 							bulletDiagonal[j].length = 0.0f;
 							bulletDiagonal[j].theta = 0.0f;
 							bulletDiagonal[j].coolTime = 30.0f;
-						}
 
-					}
+
 				}
 			}
-		}
+}
+
+#pragma endregion
+
 
 #pragma endregion
 #pragma region 弾の当たり判定
@@ -522,79 +594,128 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			player.velocity.y = 0.0f;
 
 		}
+
 #pragma endregion
+
 
 #pragma region 自機の移動
 
-		player.move.x = 0.0f;
-		player.move.y = 0.0f;
+			player.move.x = 0.0f;
+			player.move.y = 0.0f;
 
-		if (keys[DIK_A] || keys[DIK_LEFT]) {
-			player.move.x -= 1.0f;
-			if (player.pos.y == 18 * blockSize && player.pos.x <= 6.1f * blockSize ||
-				player.pos.y == 17 * blockSize && player.pos.x <= 8.1f * blockSize ||
-				player.pos.y == 16 * blockSize && player.pos.x <= 10.13f * blockSize) {
-				player.move.x += 1.0f;
-			}
-		}
 
-		if (keys[DIK_D] || keys[DIK_RIGHT]) {
-			player.move.x += 1.0f;
-			if (player.pos.y == 18 * blockSize && player.pos.x + player.width >= 33.9f * blockSize ||
-				player.pos.y == 17 * blockSize && player.pos.x + player.width >= 31.9f * blockSize ||
-				player.pos.y == 16 * blockSize && player.pos.x + player.width >= 29.8f * blockSize) {
+			if (keys[DIK_A] || keys[DIK_LEFT]) {
 				player.move.x -= 1.0f;
+				if (map[int(player.pos.y / 32)][int(player.pos.x / 32 - 0.13f)] == 1) {
+					player.move.x += 1.0f;
+				}
+
 			}
-		}
 
-		player.lenght = sqrtf(player.move.x * player.move.x + player.move.y * player.move.y);
-		if (player.lenght != 0.0f) {
-			player.move.x /= player.lenght;
-			player.move.y /= player.lenght;
-		}
 
-		player.pos.x += player.move.x * player.moveSpeed;
-		player.pos.y += player.move.y * player.moveSpeed;
+			if (keys[DIK_D] || keys[DIK_RIGHT]) {
+				player.move.x += 1.0f;
+				if (map[int(player.pos.y / 32)][int(player.pos.x / 32 + 1.13f)] == 1) {
+					player.move.x -= 1.0f;
+				}
+
+			}
+
+			player.lenght = sqrtf(player.move.x * player.move.x + player.move.y * player.move.y);
+			if (player.lenght != 0.0f) {
+				player.move.x /= player.lenght;
+				player.move.y /= player.lenght;
+			}
+
+			player.pos.x += player.move.x * player.moveSpeed;
+			player.pos.y += player.move.y * player.moveSpeed;
 
 #pragma endregion
 
 
 #pragma region ジャンプ
 
-		//地上でのジャンプ
-		if (keys[DIK_SPACE] != 0 && !preKeys[DIK_SPACE] && player.pos.y == player.height) {
-			if (player.jumpCount <= 2) {
-				player.velocity.y = 13.0f;
+
+			//地上でのジャンプ
+			if (keys[DIK_SPACE] != 0 && !preKeys[DIK_SPACE] && player.pos.y == player.height) {
+				if (player.jumpCount <= 2) {
+					player.velocity.y = 13.0f;
+				}
+
 			}
-		}
 
-		//空中ジャンプ
-		if (keys[DIK_SPACE] != 0 && !preKeys[DIK_SPACE] && player.pos.y >= player.height) {
-			if (player.jumpCount <= 2) {
-				player.velocity.y = 13.0f;
+
+			//空中ジャンプ
+			if (keys[DIK_SPACE] != 0 && !preKeys[DIK_SPACE] && player.pos.y >= player.height) {
+				if (player.jumpCount <= 2) {
+					player.velocity.y = 13.0f;
+				}
+
 			}
-		}
 
-		//ジャンプの回数制限
-		if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
-			player.jumpCount++;
-		}
+			//ジャンプの回数制限
+			if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
+				player.jumpCount++;
+			}
 
-		//ジャンプの速度に加速度を足す
-		player.velocity.x -= player.acceleration.x;
-		player.velocity.y -= player.acceleration.y;
 
-		//ジャンプの位置に速度を足す
-		player.pos.x -= player.velocity.x;
-		player.pos.y -= player.velocity.y;
+			//ボールの速度に加速度を足す
+			player.velocity.x -= player.acceleration.x;
+			player.velocity.y -= player.acceleration.y;
 
-		if (player.pos.y >= player.height + blockNum * blockSize) {
-			player.pos.y = player.height + blockNum * blockSize;
-			player.jumpCount = 0;
-		}
+			//ボールの位置に速度を足す
+			player.pos.x -= player.velocity.x;
+			player.pos.y -= player.velocity.y;
+
+
+			if (player.pos.y >= player.height + blockNum * blockSize) {
+				player.pos.y = player.height + blockNum * blockSize;
+				player.jumpCount = 0;
+			}
+
 
 #pragma endregion
+		}
 
+#pragma region シーンの切り替え
+		switch (scene)
+		{
+		case TITLE:
+			Novice::ScreenPrintf(0, 0, "title");
+			if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
+				scene = GAMESCENE;
+			}
+
+			break;
+		case EXPLAIN:
+			Novice::ScreenPrintf(0, 0, "title");
+			if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
+				scene = GAMESCENE;
+			}
+			break;
+		case GAMESCENE:
+			Novice::ScreenPrintf(0, 0, "gamescene");
+			if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
+				scene = CLEAR;
+			}
+
+			break;
+		case GAMEOVER:
+			Novice::ScreenPrintf(0, 0, "gameover");
+			if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
+				scene = TITLE;
+			}
+
+			break;
+		case CLEAR:
+			Novice::ScreenPrintf(0, 0, "clear");
+			if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
+				scene = TITLE;
+			}
+
+			break;
+		}
+#pragma endregion
 
 
 
@@ -606,7 +727,28 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓描画処理ここから
 		///
-		for (int i = 0; i < maxBullet; i++) {
+
+		
+=======
+
+
+		for (int y = 0; y < 23; y++) {
+			for (int x = 0; x < 40; x++) {
+				if (map[y][x] == 1) {
+					Novice::DrawSprite(x * 32, y * 32, block1, 1.0f, 1.0f, 0.0f, WHITE);
+				}
+				if (map[y][x] == 2) {
+					Novice::DrawSprite(x * 32, y * 32, block2, 1.0f, 1.0f, 0.0f, WHITE);
+
+		if (scene == GAMESCENE)
+		{
+			for (int i = 0; i < maxBullet; i++) {
+				if (bulletVertical[i].isAlive == true) {
+					/*bullet[i].pos.y = 100.0f + i * 80.0f;*/
+
+
+
+  for (int i = 0; i < maxBullet; i++) {
 			if (bulletVertical[i].isHit == true) {
 				/*bullet[i].pos.y = 100.0f + i * 80.0f;*/
 				Novice::DrawSprite(
@@ -625,6 +767,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					static_cast<int>(bulletBeside[i].pos.x-25), static_cast<int>(bulletBeside[i].pos.y-25),
 					Bullet, 1.0f, 1.0f, 0.0f, WHITE);
 
+					Novice::DrawEllipse(
+						static_cast<int>(bulletVertical[i].pos.x), static_cast<int>(bulletVertical[i].pos.y),
+						static_cast<int>(bulletVertical[i].radius), static_cast<int>(bulletVertical[i].radius),
+						1.0f, RED, kFillModeSolid);
+				}
+				if (bulletBeside[i].isAlive == true) {
+					/*bullet[i].pos.y = 100.0f + i * 80.0f;*/
+
 
 
 				/*Novice::DrawEllipse(
@@ -637,6 +787,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				Novice::DrawSprite(
 					static_cast<int>(bulletDiagonal[i].pos.x-25), static_cast<int>(bulletDiagonal[i].pos.y-25),
 					Bullet, 1.0f, 1.0f, 0.0f, WHITE);
+
+
+					Novice::DrawEllipse(
+						static_cast<int>(bulletBeside[i].pos.x), static_cast<int>(bulletBeside[i].pos.y),
+						static_cast<int>(bulletBeside[i].radius), static_cast<int>(bulletBeside[i].radius),
+						1.0f, RED, kFillModeSolid);
+				}
+				if (bulletDiagonal[i].isAlive == true) {
+					/*bullet[i].pos.y = 100.0f + i * 80.0f;*/
 
 
 				/*Novice::DrawEllipse(
@@ -655,16 +814,36 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			Novice::ScreenPrintf(0, 527 + i * 17, "posyDiagonal%d isAlive%d", static_cast<int>(bulletDiagonal[i].pos.y), bulletDiagonal[i].isAlive);
 		}*/
 
-		for (int y = 0; y < 23; y++) {
-			for (int x = 0; x < 40; x++) {
-				if (map[y][x] == 1) {
-					Novice::DrawSprite(x * blockSize, y * blockSize, block1, 1.0f, 1.0f, 0.0f, WHITE);
-				}
-				if (map[y][x] == 2) {
-					Novice::DrawSprite(x * blockSize, y * blockSize, block2, 1.0f, 1.0f, 0.0f, WHITE);
+
+
+
+					Novice::DrawEllipse(
+						static_cast<int>(bulletDiagonal[i].pos.x), static_cast<int>(bulletDiagonal[i].pos.y),
+						static_cast<int>(bulletDiagonal[i].radius), static_cast<int>(bulletDiagonal[i].radius),
+						1.0f, RED, kFillModeSolid);
 				}
 			}
-		}
+			/*for (int i = 0; i < maxBullet; i++) {
+				Novice::ScreenPrintf(0, i * 17, "posxVertical%disAlive%d\n\n", static_cast<int>(bulletVertical[i].pos.x), bulletVertical[i].isAlive);
+				Novice::ScreenPrintf(0, 102 + i * 17, "posyVertical%d isAlive%d\n\n", static_cast<int>(bulletVertical[i].pos.y), bulletVertical[i].isAlive);
+				Novice::ScreenPrintf(0, 204 + i * 17, "posxBeside%d isAlive%d\n\n", static_cast<int>(bulletBeside[i].pos.x), bulletBeside[i].isAlive);
+				Novice::ScreenPrintf(0, 306 + i * 17, "posyBeside%d isAlive%d", static_cast<int>(bulletBeside[i].pos.y), bulletBeside[i].isAlive);
+				Novice::ScreenPrintf(0, 425 + i * 17, "posxDiagonal%d isAlive%d\n\n", static_cast<int>(bulletDiagonal[i].pos.x), bulletDiagonal[i].isAlive);
+				Novice::ScreenPrintf(0, 527 + i * 17, "posyDiagonal%d isAlive%d", static_cast<int>(bulletDiagonal[i].pos.y), bulletDiagonal[i].isAlive);
+			}*/
+
+
+			for (int y = 0; y < 23; y++) {
+				for (int x = 0; x < 40; x++) {
+					if (map[y][x] == 1) {
+						Novice::DrawSprite(x * blockSize, y * blockSize, block1, 1.0f, 1.0f, 0.0f, WHITE);
+					}
+					if (map[y][x] == 2) {
+						Novice::DrawSprite(x * blockSize, y * blockSize, block2, 1.0f, 1.0f, 0.0f, WHITE);
+					}
+
+				}
+			}
 
 		if (player.isHit == true) {
 			Novice::DrawBox(
@@ -673,6 +852,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				0.0f, WHITE, kFillModeSolid);
 		}
 		else if (player.lifeCount >= 0) {
+
 
 			if (player.lifeCount % 10 == 0) {
 				Novice::DrawBox(
@@ -699,6 +879,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Novice::ScreenPrintf(0, 260, "bulletV = %d", static_cast<int>(bullretVerticalCount));
 		Novice::ScreenPrintf(0, 280, "player.isHit %d", player.isHit);
 		Novice::ScreenPrintf(0, 300, "player.count %d", player.lifeCount);
+
 
 
 
