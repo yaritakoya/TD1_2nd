@@ -490,6 +490,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 
 #pragma endregion
+
 #pragma region 弾の当たり判定
 			if (player.isHit == true) {
 				for (int i = 0; i < maxBullet; i++) {
@@ -582,7 +583,24 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 							}
 
+
+
+						}
+					}
+
+				}
+			}
+			if (player.isHit == false) {
+				player.lifeCount--;
+				if (player.lifeCount <= 0) {
+					player.isHit = true;
+					player.lifeCount = 200;
+				}
+			}
+#pragma endregion
+
 #pragma region レーザー当たり判定
+
 #pragma region レーザー当たり判定(横)		
 			//横向きのレーザー縦向きのレーザー
 			if (horizontalLaserCapsule.end.x < 1300)
@@ -619,7 +637,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				if (horizontalLaserDot < horizontalLaserSumRadius)
 				{
 					horizontalLaser.isShot = true;
-					
+
 				}
 			} else
 			{
@@ -629,6 +647,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			}
 #pragma endregion
+
 #pragma region レーザー当たり判定(縦)
 			if (verticalLaserCapsule.end.y < 800)
 			{
@@ -663,21 +682,22 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				if (verticalLaserDot < verticalLaserSumRadius)
 				{
-					
+
 					verticalLaser.isShot = true;
 				}
 			} else
 			{
 				verticalLaser.isShot = false;
-				
-				verticalLaserCapsule.start = { float(rand() % 1200+0) ,-64 };
+
+				verticalLaserCapsule.start = { float(rand() % 1200 + 0) ,-64 };
 				verticalLaserCapsule.end = { verticalLaserCapsule.start.x + 32,-60 };
 				verticalLaserCapsule.radius = { 32.0f };
 			}
 
 #pragma endregion
+
 #pragma region レーザー当たり判定(斜め)
-			if ( obliqueLaserCapsule.end.y<1000)//obliqueLaserCapsule.end.x<1024||
+			if (obliqueLaserCapsule.end.y < 1000)//obliqueLaserCapsule.end.x<1024||
 			{
 				obliqueLaser.isShot = true;
 
@@ -710,34 +730,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				if (obliqueLaserDot < obliqueLaserSumRadius)
 				{
-					
-					
+
+
 					obliqueLaser.isShot = true;
-					
+
 				}
 			} else
 			{
 				obliqueLaser.isShot = false;
-				
-				obliqueLaserCapsule.start = { float(rand() % 1200 + 40)-1024 ,-1024};
+
+				obliqueLaserCapsule.start = { float(rand() % 1200 + 40) - 1024 ,-1024 };
 				obliqueLaserCapsule.end = { (obliqueLaserCapsule.start.x) + 720, (obliqueLaserCapsule.start.y) + 720 };
 				obliqueLaserCapsule.radius = { 32.0f };
 			}
 #pragma endregion
-#pragma endregion
 
-						}
-					}
-
-				}
-			}
-			if (player.isHit == false) {
-				player.lifeCount--;
-				if (player.lifeCount <= 0) {
-					player.isHit = true;
-					player.lifeCount = 200;
-				}
-			}
 #pragma endregion
 
 #pragma region 地面との当たり判定
