@@ -34,8 +34,7 @@ typedef struct Player {
 	int rect;
 	int moveSpeed;
 
-	//レーザーに使う
-	float radius;
+
 	
 
 	int lifeCount;
@@ -620,10 +619,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				if (horizontalLaserDot < horizontalLaserSumRadius)
 				{
 					horizontalLaser.isShot = true;
-					player.color = RED;
-				} else
-				{
-					player.color = WHITE;
+					
 				}
 			} else
 			{
@@ -667,13 +663,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				if (verticalLaserDot < verticalLaserSumRadius)
 				{
-					player.color = BLUE;
+					
 					verticalLaser.isShot = true;
 				}
 			} else
 			{
 				verticalLaser.isShot = false;
-				player.color = WHITE;
+				
 				verticalLaserCapsule.start = { float(rand() % 1200+0) ,-64 };
 				verticalLaserCapsule.end = { verticalLaserCapsule.start.x + 32,-60 };
 				verticalLaserCapsule.radius = { 32.0f };
@@ -715,14 +711,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				if (obliqueLaserDot < obliqueLaserSumRadius)
 				{
 					
-					player.color = GREEN;
+					
 					obliqueLaser.isShot = true;
 					
 				}
 			} else
 			{
 				obliqueLaser.isShot = false;
-				player.color = WHITE;
+				
 				obliqueLaserCapsule.start = { float(rand() % 1200 + 40)-1024 ,-1024};
 				obliqueLaserCapsule.end = { (obliqueLaserCapsule.start.x) + 720, (obliqueLaserCapsule.start.y) + 720 };
 				obliqueLaserCapsule.radius = { 32.0f };
@@ -1117,7 +1113,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				static_cast<int>(player.width), static_cast<int>(player.height),
 				0.0f, WHITE, kFillModeSolid);
 
-			Novice::DrawBox(static_cast<int>(player.pos.x), static_cast<int>(player.pos.y), static_cast<int>(player.width), static_cast<int>(player.height), 0.0f, player.color, kFillModeSolid);
+			Novice::DrawBox(static_cast<int>(player.pos.x), static_cast<int>(player.pos.y), static_cast<int>(player.width), static_cast<int>(player.height), 0.0f, WHITE, kFillModeSolid);
 		
 		
 
