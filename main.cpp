@@ -729,10 +729,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 					horizontalLaserSumRadius = player.radius + horizontalLaserCapsule.radius;
-
-					if (horizontalLaserDot < horizontalLaserSumRadius){
-						horizontalLaser.isShot = true;
-						player.isHit = false;
+					if (player.isHit == true) {
+						if (horizontalLaserDot < horizontalLaserSumRadius) {
+							horizontalLaser.isShot = true;
+							player.isHit = false;
+							player.life -= 1;
+						}
 					}
 				} else{
 					horizontalLaser.isShot = false;
@@ -777,10 +779,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					verticalLaserDot = sqrtf(verticalLaserClosestPointToCenter.x * verticalLaserClosestPointToCenter.x + verticalLaserClosestPointToCenter.y * verticalLaserClosestPointToCenter.y);
 
 					verticalLaserSumRadius = player.radius + verticalLaserCapsule.radius;
-
-					if (verticalLaserDot < verticalLaserSumRadius) {
-						verticalLaser.isShot = true;
-						player.isHit = false;
+					if (player.isHit == true) {
+						if (verticalLaserDot < verticalLaserSumRadius) {
+							verticalLaser.isShot = true;
+							player.isHit = false;
+							player.life -= 1;
+						}
 					}
 				} else {
 
@@ -824,12 +828,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					obliqueLaserDot = sqrtf(obliqueLaserClosestPointToCenter.x * obliqueLaserClosestPointToCenter.x + obliqueLaserClosestPointToCenter.y * obliqueLaserClosestPointToCenter.y);
 
 					obliqueLaserSumRadius = player.radius + obliqueLaserCapsule.radius;
+					if (player.isHit == true) {
+						if (obliqueLaserDot < obliqueLaserSumRadius) {
 
-					if (obliqueLaserDot < obliqueLaserSumRadius) {
-
-						obliqueLaser.isShot = true;
-						player.isHit = false;
-
+							obliqueLaser.isShot = true;
+							player.isHit = false;
+							player.life -= 1;
+						}
 					}
 				} else {
 					obliqueLaser.isShot = false;
