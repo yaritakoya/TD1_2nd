@@ -1151,8 +1151,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			//タイム
 			for (int i = 0; i < arrayTimeNum; i++) {
-				Novice::DrawSprite(640 + timeGraphWidth * i - timeGraphWidth, timeGraphWidth,
-					numberGraph[timeNumberArray[i]], 0.5f, 0.5f, 0.0f, 0xFFFFFFFF);
+				Novice::DrawSprite(630 + timeGraphWidth * i - timeGraphWidth, timeGraphWidth,
+					numberGraph[timeNumberArray[i]], 1.0f, 1.0f, 0.0f, 0xFFFFFFFF);
 			}
 
 		}
