@@ -4,7 +4,7 @@
 
 
 
-const char kWindowTitle[] = "1244_コバヤシ_ヤリタ_ヨシノ_スライムのプライドのために";
+const char kWindowTitle[] = "1244_スライムのプライドのために";
 
 typedef struct Vector2 {
 	float x;
