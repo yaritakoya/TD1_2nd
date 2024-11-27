@@ -1015,6 +1015,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			if (scene == GAMESCENE)
 			{
+
+#pragma region map描画
+
 				for (int y = 0; y < 23; y++) {
 					for (int x = 0; x < 40; x++) {
 						if (map[y][x] == 1) {
@@ -1027,58 +1030,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 				}
 
-
-				for (int i = 0; i < maxBullet; i++) {
-					if (bulletVertical[i].isHit == true) {
-						/*bullet[i].pos.y = 100.0f + i * 80.0f;*/
-						Novice::DrawSprite(
-							static_cast<int>(bulletVertical[i].pos.x - 32), static_cast<int>(bulletVertical[i].pos.y - 32),
-							Bullet, 1.0f, 1.0f, 0.0f, WHITE);
-
-
-						Novice::DrawEllipse(
-							static_cast<int>(bulletVertical[i].pos.x), static_cast<int>(bulletVertical[i].pos.y),
-							static_cast<int>(bulletVertical[i].radius), static_cast<int>(bulletVertical[i].radius),
-							1.0f, RED, kFillModeSolid);
-					}
-					if (bulletBeside[i].isHit == true) {
-						/*bullet[i].pos.y = 100.0f + i * 80.0f;*/
-						Novice::DrawSprite(
-							static_cast<int>(bulletBeside[i].pos.x - 32), static_cast<int>(bulletBeside[i].pos.y - 32),
-							Bullet, 1.0f, 1.0f, 0.0f, WHITE);
-
-						/*	Novice::DrawEllipse(
-								static_cast<int>(bulletVertical[i].pos.x), static_cast<int>(bulletVertical[i].pos.y),
-								static_cast<int>(bulletVertical[i].radius), static_cast<int>(bulletVertical[i].radius),
-								1.0f, RED, kFillModeSolid);*/
-					}
-					if (bulletBeside[i].isHit == true) {
-						/*bullet[i].pos.y = 100.0f + i * 80.0f;*/
-
-
-
-					}
-					if (bulletDiagonal[i].isHit == true) {
-						/*bullet[i].pos.y = 100.0f + i * 80.0f;*/
-						Novice::DrawSprite(
-							static_cast<int>(bulletDiagonal[i].pos.x - 32), static_cast<int>(bulletDiagonal[i].pos.y - 32),
-							Bullet, 1.0f, 1.0f, 0.0f, WHITE);
-
-
-
-
-					}
-					if (bulletDiagonal[i].isHit == true) {
-						/*bullet[i].pos.y = 100.0f + i * 80.0f;*/
-
-
-					/*Novice::DrawEllipse(
-						static_cast<int>(bulletDiagonal[i].pos.x), static_cast<int>(bulletDiagonal[i].pos.y),
-						static_cast<int>(bulletDiagonal[i].radius), static_cast<int>(bulletDiagonal[i].radius),
-						1.0f, RED, kFillModeSolid);*/
-					}
-
-				}
+#pragma endregion
 
 
 #pragma region レーザー描画
@@ -1130,12 +1082,38 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma endregion
 
 
+#pragma region bullet描画
+
+				for (int i = 0; i < maxBullet; i++) {
+					if (bulletVertical[i].isHit == true) {
+						Novice::DrawSprite(
+							static_cast<int>(bulletVertical[i].pos.x - 32), static_cast<int>(bulletVertical[i].pos.y - 32),
+							Bullet, 1.0f, 1.0f, 0.0f, WHITE);
+
+
+					}
+					if (bulletBeside[i].isHit == true) {
+						Novice::DrawSprite(
+							static_cast<int>(bulletBeside[i].pos.x - 32), static_cast<int>(bulletBeside[i].pos.y - 32),
+							Bullet, 1.0f, 1.0f, 0.0f, WHITE);
+
+
+					}
+
+					if (bulletDiagonal[i].isHit == true) {
+						Novice::DrawSprite(
+							static_cast<int>(bulletDiagonal[i].pos.x - 32), static_cast<int>(bulletDiagonal[i].pos.y - 32),
+							Bullet, 1.0f, 1.0f, 0.0f, WHITE);
+
+
+					}
+
+				}
+
+#pragma endregion
+
 
 			}
-
-
-
-
 
 
 			if (player.isHit == true) {
@@ -1148,8 +1126,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			}
 			else if (player.lifeCount >= 0) {
-
-
 
 				if (player.lifeCount % 10 == 0) {
 					Novice::DrawBox(
