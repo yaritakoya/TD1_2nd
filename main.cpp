@@ -362,7 +362,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	player.radius = 25.0f;
 	player.isHit = true;
 	player.lifeCount = 200;
-	player.life = 1;
+	player.life = 2;
 
 	int flameCountSlime = 0;
 
