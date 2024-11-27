@@ -182,8 +182,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	horizontalLaser.coolTime = 5;
 
 	LaserCapsule horizontalLaserCapsule = {};
-	horizontalLaserCapsule.start = { -100 , float(rand() % 720 + 40) };
-	horizontalLaserCapsule.end = { -100,horizontalLaserCapsule.start.y + 32 };
+	horizontalLaserCapsule.start = { -1000 ,-1000 };// float(rand() % 720 + 40)
+	horizontalLaserCapsule.end = { -1000,horizontalLaserCapsule.start.y + 32 };
 	horizontalLaserCapsule.radius = { 32.0f };
 	horizontalLaserCapsule.color = WHITE;
 
@@ -229,7 +229,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	obliqueLaser.size = 128.0f;
 	obliqueLaser.pos = { 0.0f,0.0f };
 	obliqueLaser.move = 0;
-	obliqueLaser.isShot = false;
+	obliqueLaser.isShot = true;
 	obliqueLaser.coolTime = 5;
 
 	//カプセル(斜め)
@@ -469,7 +469,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 			}
 
-				//斜め散弾
+			//斜め散弾
 			if (atacckTimer >= 3600) {
 				if (shotDiagonalFlag == true) {
 					if (bullretDiagonalCount < 6) {
@@ -523,119 +523,120 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma region 弾の当たり判定
 
-				if (player.isHit == true) {
-					for (int i = 0; i < maxBullet; i++) {
+			if (player.isHit == true) {
+				for (int i = 0; i < maxBullet; i++) {
 
-						player.subPos = { player.pos.x + (player.width / 2),player.pos.y + (player.height / 2) };
-						//距離計算
-						bulletBeside[i].distance =
-							sqrtf((bulletBeside[i].pos.x - player.subPos.x) * (bulletBeside[i].pos.x - player.subPos.x) +
-								(bulletBeside[i].pos.y - player.subPos.y) * (bulletBeside[i].pos.y - player.subPos.y));
-						bulletDiagonal[i].distance =
-							sqrtf((bulletDiagonal[i].pos.x - player.subPos.x) * (bulletDiagonal[i].pos.x - player.subPos.x) +
-								(bulletDiagonal[i].pos.y - player.subPos.y) * (bulletDiagonal[i].pos.y - player.subPos.y));
-						bulletVertical[i].distance =
-							sqrtf((bulletVertical[i].pos.x - player.subPos.x) * (bulletVertical[i].pos.x - player.subPos.x) +
-								(bulletVertical[i].pos.y - player.subPos.y) * (bulletVertical[i].pos.y - player.subPos.y));
+					player.subPos = { player.pos.x + (player.width / 2),player.pos.y + (player.height / 2) };
+					//距離計算
+					bulletBeside[i].distance =
+						sqrtf((bulletBeside[i].pos.x - player.subPos.x) * (bulletBeside[i].pos.x - player.subPos.x) +
+							(bulletBeside[i].pos.y - player.subPos.y) * (bulletBeside[i].pos.y - player.subPos.y));
+					bulletDiagonal[i].distance =
+						sqrtf((bulletDiagonal[i].pos.x - player.subPos.x) * (bulletDiagonal[i].pos.x - player.subPos.x) +
+							(bulletDiagonal[i].pos.y - player.subPos.y) * (bulletDiagonal[i].pos.y - player.subPos.y));
+					bulletVertical[i].distance =
+						sqrtf((bulletVertical[i].pos.x - player.subPos.x) * (bulletVertical[i].pos.x - player.subPos.x) +
+							(bulletVertical[i].pos.y - player.subPos.y) * (bulletVertical[i].pos.y - player.subPos.y));
 
 
-						if (bulletBeside[i].isHit == true) {
-							if (bulletBeside[i].distance < player.radius + bulletBeside[i].radius) {
-								bulletBeside[i].isHit = false;
-								player.isHit = false;
-								bullretBesideCount++;
-								if (bullretBesideCount == maxBullet) {
-									bulletBeside[i].isHit = true;
-									bullretBesideCount = 0;
-									for (int j = 0; j < maxBullet; j++) {
-										bulletBeside[j].pos = { 1200.0f,360.0f };
-										bulletBeside[j].prePoint;
-										bulletBeside[j].fixedPos = { 1200.0f,360.0f };
-										bulletBeside[j].move;
-										bulletBeside[j].radius = 30.0f;
-										bulletBeside[j].speed = 0.0f;
-										bulletBeside[j].velocity = 10.0f;
-										bulletBeside[j].isHit = true;
-										bulletBeside[j].length = 0.0f;
-										bulletBeside[j].theta = 0.0f;
-										bulletBeside[j].coolTime = 30.0f;
-
-									}
-								}
-							}
-
-						}
-						if (bulletDiagonal[i].isHit == true) {
-							if (bulletDiagonal[i].distance < player.radius + bulletDiagonal[i].radius) {
-								bulletDiagonal[i].isHit = false;
-								player.isHit = false;
-								bullretDiagonalCount++;
-								if (bullretDiagonalCount == maxBullet) {
-									bulletDiagonal[i].isHit = true;
-									bullretDiagonalCount = 0.0f;
-									for (int j = 0; j < maxBullet; j++) {
-										bulletDiagonal[j].pos = { 1250.0f,30.0f };
-										bulletDiagonal[j].prePoint;
-										bulletDiagonal[j].fixedPos = { 1250.0f,30.0f };
-										bulletDiagonal[j].move;
-										bulletDiagonal[j].radius = 30.0f;
-										bulletDiagonal[j].speed = 0.0f;
-										bulletDiagonal[j].velocity = 10.0f;
-										bulletDiagonal[j].isHit = true;
-										bulletDiagonal[j].length = 0.0f;
-										bulletDiagonal[j].theta = 0.0f;
-										bulletDiagonal[j].coolTime = 30.0f;
-									}
-								}
-							}
-						}
-						if (bulletVertical[i].isHit == true) {
-							if (bulletVertical[i].distance < player.radius + bulletVertical[i].radius) {
-								bulletVertical[i].isHit = false;
-								player.isHit = false;
-								bullretVerticalCount++;
-
-								if (bullretVerticalCount == maxBullet) {
-									bulletVertical[i].isHit = true;
-									bullretVerticalCount = 0.0f;
-									for (int j = 0; j < maxBullet; j++) {
-										bulletVertical[j].pos = { 640.0f,30.0f };
-										bulletVertical[j].prePoint;
-										bulletVertical[j].fixedPos = { 640.0f,30.0f };
-										bulletVertical[j].move;
-										bulletVertical[j].radius = 30.0f;
-										bulletVertical[j].speed = 0.0f;
-										bulletVertical[j].velocity = 10.0f;
-										bulletVertical[j].isHit = true;
-										bulletVertical[j].length = 0.0f;
-										bulletVertical[j].theta = 0.0f;
-										bulletVertical[j].coolTime = 30.0f;
-									}
+					if (bulletBeside[i].isHit == true) {
+						if (bulletBeside[i].distance < player.radius + bulletBeside[i].radius) {
+							bulletBeside[i].isHit = false;
+							player.isHit = false;
+							bullretBesideCount++;
+							if (bullretBesideCount == maxBullet) {
+								bulletBeside[i].isHit = true;
+								bullretBesideCount = 0;
+								for (int j = 0; j < maxBullet; j++) {
+									bulletBeside[j].pos = { 1200.0f,360.0f };
+									bulletBeside[j].prePoint;
+									bulletBeside[j].fixedPos = { 1200.0f,360.0f };
+									bulletBeside[j].move;
+									bulletBeside[j].radius = 30.0f;
+									bulletBeside[j].speed = 0.0f;
+									bulletBeside[j].velocity = 10.0f;
+									bulletBeside[j].isHit = true;
+									bulletBeside[j].length = 0.0f;
+									bulletBeside[j].theta = 0.0f;
+									bulletBeside[j].coolTime = 30.0f;
 
 								}
-
-
 							}
-
-
 						}
 
 					}
-				}
-				if (player.isHit == false) {
-					player.lifeCount--;
-					if (player.lifeCount <= 0) {
-						player.isHit = true;
-						player.lifeCount = 200;
+					if (bulletDiagonal[i].isHit == true) {
+						if (bulletDiagonal[i].distance < player.radius + bulletDiagonal[i].radius) {
+							bulletDiagonal[i].isHit = false;
+							player.isHit = false;
+							bullretDiagonalCount++;
+							if (bullretDiagonalCount == maxBullet) {
+								bulletDiagonal[i].isHit = true;
+								bullretDiagonalCount = 0.0f;
+								for (int j = 0; j < maxBullet; j++) {
+									bulletDiagonal[j].pos = { 1250.0f,30.0f };
+									bulletDiagonal[j].prePoint;
+									bulletDiagonal[j].fixedPos = { 1250.0f,30.0f };
+									bulletDiagonal[j].move;
+									bulletDiagonal[j].radius = 30.0f;
+									bulletDiagonal[j].speed = 0.0f;
+									bulletDiagonal[j].velocity = 10.0f;
+									bulletDiagonal[j].isHit = true;
+									bulletDiagonal[j].length = 0.0f;
+									bulletDiagonal[j].theta = 0.0f;
+									bulletDiagonal[j].coolTime = 30.0f;
+								}
+							}
+						}
 					}
+					if (bulletVertical[i].isHit == true) {
+						if (bulletVertical[i].distance < player.radius + bulletVertical[i].radius) {
+							bulletVertical[i].isHit = false;
+							player.isHit = false;
+							bullretVerticalCount++;
+
+							if (bullretVerticalCount == maxBullet) {
+								bulletVertical[i].isHit = true;
+								bullretVerticalCount = 0.0f;
+								for (int j = 0; j < maxBullet; j++) {
+									bulletVertical[j].pos = { 640.0f,30.0f };
+									bulletVertical[j].prePoint;
+									bulletVertical[j].fixedPos = { 640.0f,30.0f };
+									bulletVertical[j].move;
+									bulletVertical[j].radius = 30.0f;
+									bulletVertical[j].speed = 0.0f;
+									bulletVertical[j].velocity = 10.0f;
+									bulletVertical[j].isHit = true;
+									bulletVertical[j].length = 0.0f;
+									bulletVertical[j].theta = 0.0f;
+									bulletVertical[j].coolTime = 30.0f;
+								}
+
+							}
+
+
+						}
+
+
+					}
+
 				}
+			}
+			if (player.isHit == false) {
+				player.lifeCount--;
+				if (player.lifeCount <= 0) {
+					player.isHit = true;
+					player.lifeCount = 200;
+				}
+			}
 #pragma endregion
 
 #pragma region レーザー当たり判定
 
 #pragma region レーザー当たり判定(横)
 
-				//横向きのレーザー縦向きのレーザー
+			//横向きのレーザー縦向きのレーザー
+			if (atacckTimer >= 1800) {
 				if (horizontalLaserCapsule.end.x < 1300)
 				{
 					horizontalLaser.isShot = true;
@@ -670,10 +671,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (horizontalLaserDot < horizontalLaserSumRadius)
 					{
 						horizontalLaser.isShot = true;
+						player.isHit = false;
 
 					}
-				}
-				else
+				} else
 				{
 					horizontalLaser.isShot = false;
 					horizontalLaserCapsule.start = { -64,float(rand() % 700 + 40) };
@@ -681,10 +682,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				}
 
+
+			}
+
+
 #pragma endregion
 
 #pragma region レーザー当たり判定(縦)
-
+			if (atacckTimer >= 0.0f) {
 				if (verticalLaserCapsule.end.y < 800)
 				{
 					verticalLaser.isShot = true;
@@ -720,9 +725,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					{
 
 						verticalLaser.isShot = true;
+						player.isHit = false;
 					}
-				}
-				else
+				} else
 				{
 					verticalLaser.isShot = false;
 
@@ -730,11 +735,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					verticalLaserCapsule.end = { verticalLaserCapsule.start.x + 32,-60 };
 					verticalLaserCapsule.radius = { 32.0f };
 				}
-
+			}
 #pragma endregion
 
 #pragma region レーザー当たり判定(斜め)
-
+			if (atacckTimer >= 3600) {
 				if (obliqueLaserCapsule.end.y < 1000)//obliqueLaserCapsule.end.x<1024||
 				{
 					obliqueLaser.isShot = true;
@@ -770,47 +775,47 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 						obliqueLaser.isShot = true;
+						player.isHit = false;
 
 					}
-				}
-				else {
+				} else {
 					obliqueLaser.isShot = false;
 
 					obliqueLaserCapsule.start = { float(rand() % 1200 + 40) - 1024 ,-1024 };
 					obliqueLaserCapsule.end = { (obliqueLaserCapsule.start.x) + 720, (obliqueLaserCapsule.start.y) + 720 };
 					obliqueLaserCapsule.radius = { 32.0f };
 				}
-
+			}
 #pragma endregion
 
 #pragma endregion
 
 #pragma region 地面との当たり判定
 
-				//段差と床の当たり判定
-				if (player.pos.x >= 0 && player.pos.x < 6 * blockSize ||
-					player.pos.x + player.width >= 34 * blockSize && player.pos.x + player.width < 36 * blockSize) {
-					blockNum = 16;
-				}
+			//段差と床の当たり判定
+			if (player.pos.x >= 0 && player.pos.x < 6 * blockSize ||
+				player.pos.x + player.width >= 34 * blockSize && player.pos.x + player.width < 36 * blockSize) {
+				blockNum = 16;
+			}
 
-				if (player.pos.x >= 6 * blockSize && player.pos.x < 8 * blockSize ||
-					player.pos.x + player.width >= 32 * blockSize && player.pos.x + player.width < 34 * blockSize) {
-					blockNum = 17;
-
-
-				}
-
-				if (player.pos.x >= 8 * blockSize && player.pos.x < 10 * blockSize ||
-					player.pos.x + player.width >= 30 * blockSize && player.pos.x + player.width < 32 * blockSize) {
-					blockNum = 18;
+			if (player.pos.x >= 6 * blockSize && player.pos.x < 8 * blockSize ||
+				player.pos.x + player.width >= 32 * blockSize && player.pos.x + player.width < 34 * blockSize) {
+				blockNum = 17;
 
 
-				}
+			}
 
-				if (player.pos.x >= 10 * blockSize && player.pos.x < 29 * blockSize) {
-					blockNum = 19;
+			if (player.pos.x >= 8 * blockSize && player.pos.x < 10 * blockSize ||
+				player.pos.x + player.width >= 30 * blockSize && player.pos.x + player.width < 32 * blockSize) {
+				blockNum = 18;
 
-				}
+
+			}
+
+			if (player.pos.x >= 10 * blockSize && player.pos.x < 29 * blockSize) {
+				blockNum = 19;
+
+			}
 
 			//空中の床の当たり判定
 			//左下
@@ -834,7 +839,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 
 
-				}
+			}
 
 			//右下
 			if ((player.pos.x >= 24 * blockSize && player.pos.x < 32 * blockSize) &&
@@ -858,7 +863,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 
 
-				}
+			}
 
 
 			//真ん中
@@ -872,70 +877,70 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 
 
-				}
+			}
 
 #pragma endregion
 
 
 #pragma region 自機の移動
 
-				player.move.x = 0.0f;
-				player.move.y = 0.0f;
+			player.move.x = 0.0f;
+			player.move.y = 0.0f;
 
 
-				if (keys[DIK_A] || keys[DIK_LEFT]) {
-					player.move.x -= 1.0f;
-					if (map[int(player.pos.y / 32)][int(player.pos.x / 32 - 0.13f)] == 1) {
-						player.move.x += 1.0f;
-					}
-
-				}
-
-
-				if (keys[DIK_D] || keys[DIK_RIGHT]) {
+			if (keys[DIK_A] || keys[DIK_LEFT]) {
+				player.move.x -= 1.0f;
+				if (map[int(player.pos.y / 32)][int(player.pos.x / 32 - 0.13f)] == 1) {
 					player.move.x += 1.0f;
-					if (map[int(player.pos.y / 32)][int(player.pos.x / 32 + 1.13f)] == 1) {
-						player.move.x -= 1.0f;
-					}
-
 				}
 
-				player.lenght = sqrtf(player.move.x * player.move.x + player.move.y * player.move.y);
-				if (player.lenght != 0.0f) {
-					player.move.x /= player.lenght;
-					player.move.y /= player.lenght;
+			}
+
+
+			if (keys[DIK_D] || keys[DIK_RIGHT]) {
+				player.move.x += 1.0f;
+				if (map[int(player.pos.y / 32)][int(player.pos.x / 32 + 1.13f)] == 1) {
+					player.move.x -= 1.0f;
 				}
 
-				player.pos.x += player.move.x * player.moveSpeed;
-				player.pos.y += player.move.y * player.moveSpeed;
+			}
+
+			player.lenght = sqrtf(player.move.x * player.move.x + player.move.y * player.move.y);
+			if (player.lenght != 0.0f) {
+				player.move.x /= player.lenght;
+				player.move.y /= player.lenght;
+			}
+
+			player.pos.x += player.move.x * player.moveSpeed;
+			player.pos.y += player.move.y * player.moveSpeed;
 
 #pragma endregion
 
 
 #pragma region ジャンプ
 
-				//地上でのジャンプ
-				if (keys[DIK_SPACE] != 0 && !preKeys[DIK_SPACE] && player.pos.y == player.height) {
-					if (player.jumpCount <= 2) {
-						player.velocity.y = 13.0f;
-					}
-
+			//地上でのジャンプ
+			if (keys[DIK_SPACE] != 0 && !preKeys[DIK_SPACE] && player.pos.y == player.height) {
+				if (player.jumpCount <= 2) {
+					player.velocity.y = 13.0f;
 				}
 
+			}
 
-				//空中ジャンプ
-				if (keys[DIK_SPACE] != 0 && !preKeys[DIK_SPACE] && player.pos.y >= player.height) {
-					if (player.jumpCount <= 2) {
-						player.velocity.y = 13.0f;
-					}
 
+			//空中ジャンプ
+			if (keys[DIK_SPACE] != 0 && !preKeys[DIK_SPACE] && player.pos.y >= player.height) {
+				if (player.jumpCount <= 2) {
+					player.velocity.y = 13.0f;
 				}
 
-				//ジャンプの回数制限
-				if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
-					player.jumpCount++;
-				}
-      
+			}
+
+			//ジャンプの回数制限
+			if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
+				player.jumpCount++;
+			}
+
 			//ボールの速度に加速度を足す
 			/*player.velocity.x -= player.acceleration.x;*/
 			player.velocity.y -= player.acceleration.y;
@@ -953,208 +958,207 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma endregion
 
-			}
+		}
 
 #pragma region シーンの切り替え
 
-			switch (scene)
-			{
-			case TITLE:
-				Novice::DrawSprite(0, 0, titleGraph, 1.0f, 1.0f, 0.0f, WHITE);
-				if (keys[DIK_BACKSPACE] && !preKeys[DIK_BACKSPACE]) {
-					scene = EXPLAIN;
-				}
-				if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
-					scene = GAMESCENE;
-				}
-
-				break;
-			case EXPLAIN:
-				Novice::ScreenPrintf(0, 0, "EXPLAIN");
-				if (keys[DIK_BACKSPACE] && !preKeys[DIK_BACKSPACE]) {
-					scene = TITLE;
-				}
-				break;
-			case GAMESCENE:
-				Novice::ScreenPrintf(0, 0, "gamescene");
-				if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
-					scene = CLEAR;
-				}
-
-				break;
-			case GAMEOVER:
-				Novice::DrawSprite(0, 0, badEndGraph, 1.0f, 1.0f, 0.0f, WHITE);
-				if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
-					scene = TITLE;
-				}
-
-				break;
-			case CLEAR:
-				Novice::DrawSprite(0, 0, clearGraph, 1.0f, 1.0f, 0.0f, WHITE);
-				if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
-					scene = TITLE;
-				}
-
-				break;
+		switch (scene)
+		{
+		case TITLE:
+			Novice::DrawSprite(0, 0, titleGraph, 1.0f, 1.0f, 0.0f, WHITE);
+			if (keys[DIK_BACKSPACE] && !preKeys[DIK_BACKSPACE]) {
+				scene = EXPLAIN;
 			}
+			if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
+				scene = GAMESCENE;
+			}
+
+			break;
+		case EXPLAIN:
+			Novice::ScreenPrintf(0, 0, "EXPLAIN");
+			if (keys[DIK_BACKSPACE] && !preKeys[DIK_BACKSPACE]) {
+				scene = TITLE;
+			}
+			break;
+		case GAMESCENE:
+			Novice::ScreenPrintf(0, 0, "gamescene");
+			if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
+				scene = CLEAR;
+			}
+
+			break;
+		case GAMEOVER:
+			Novice::DrawSprite(0, 0, badEndGraph, 1.0f, 1.0f, 0.0f, WHITE);
+			if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
+				scene = TITLE;
+			}
+
+			break;
+		case CLEAR:
+			Novice::DrawSprite(0, 0, clearGraph, 1.0f, 1.0f, 0.0f, WHITE);
+			if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
+				scene = TITLE;
+			}
+
+			break;
+		}
 
 #pragma endregion
 
 
 
 
-			///
-			/// ↑更新処理ここまで
-			///
+		///
+		/// ↑更新処理ここまで
+		///
 
-			///
-			/// ↓描画処理ここから
-			///
+		///
+		/// ↓描画処理ここから
+		///
 
 
 
-			if (scene == GAMESCENE)
-			{
+		if (scene == GAMESCENE)
+		{
 
 #pragma region map描画
 
-				for (int y = 0; y < 23; y++) {
-					for (int x = 0; x < 40; x++) {
-						if (map[y][x] == 1) {
-							Novice::DrawSprite(x * blockSize, y * blockSize, block1, 1.0f, 1.0f, 0.0f, WHITE);
-						}
-						if (map[y][x] == 2) {
-							Novice::DrawSprite(x * blockSize, y * blockSize, block2, 1.0f, 1.0f, 0.0f, WHITE);
-						}
-
+			for (int y = 0; y < 23; y++) {
+				for (int x = 0; x < 40; x++) {
+					if (map[y][x] == 1) {
+						Novice::DrawSprite(x * blockSize, y * blockSize, block1, 1.0f, 1.0f, 0.0f, WHITE);
 					}
+					if (map[y][x] == 2) {
+						Novice::DrawSprite(x * blockSize, y * blockSize, block2, 1.0f, 1.0f, 0.0f, WHITE);
+					}
+
 				}
+			}
 
 #pragma endregion
 
 
 #pragma region レーザー描画
 
-				//レーザー
-				if (horizontalLaserCapsule.end.x < 1300 || verticalLaserCapsule.end.y < 800)
-				{
+			//レーザー
+			if (horizontalLaserCapsule.end.x < 1300)
+			{
 
-					horizontalLaser.move = 0;
-					horizontalLaser.move += horizontalLaser.move + 4;
-					Novice::DrawQuad(
-						static_cast<int>(horizontalLaserCapsule.start.x), static_cast<int>(horizontalLaserCapsule.start.y - 16),
-						static_cast<int>(horizontalLaserCapsule.end.x += horizontalLaser.move), static_cast<int>(horizontalLaserCapsule.start.y - 16),
-						static_cast<int>(horizontalLaserCapsule.start.x), static_cast<int>(horizontalLaserCapsule.end.y + horizontalLaser.size) - 16,
-						static_cast<int>(horizontalLaserCapsule.end.x += horizontalLaser.move), static_cast<int>(horizontalLaserCapsule.end.y + horizontalLaser.size) - 16,
-						0, 0, static_cast<int>(horizontalLaser.move), static_cast<int>(horizontalLaser.size),
-						horizontalLaserGr, WHITE
-					);
+				horizontalLaser.move = 0;
+				horizontalLaser.move += horizontalLaser.move + 4;
+				Novice::DrawQuad(
+					static_cast<int>(horizontalLaserCapsule.start.x), static_cast<int>(horizontalLaserCapsule.start.y - 16),
+					static_cast<int>(horizontalLaserCapsule.end.x += horizontalLaser.move), static_cast<int>(horizontalLaserCapsule.start.y - 16),
+					static_cast<int>(horizontalLaserCapsule.start.x), static_cast<int>(horizontalLaserCapsule.end.y + horizontalLaser.size) - 16,
+					static_cast<int>(horizontalLaserCapsule.end.x += horizontalLaser.move), static_cast<int>(horizontalLaserCapsule.end.y + horizontalLaser.size) - 16,
+					0, 0, static_cast<int>(horizontalLaser.move), static_cast<int>(horizontalLaser.size),
+					horizontalLaserGr, WHITE
+				);
 
-					//Novice::DrawEllipse(static_cast<int>(horizontalLaserCapsule.start.x), static_cast<int>(horizontalLaserCapsule.start.y + 32), static_cast<int>(horizontalLaserCapsule.radius), static_cast<int>(horizontalLaserCapsule.radius), 0.0f, horizontalLaserCapsule.color, kFillModeWireFrame);
-					//Novice::DrawEllipse(static_cast<int>(horizontalLaserCapsule.end.x-32), static_cast<int>(horizontalLaserCapsule.end.y + 16), static_cast<int>(horizontalLaserCapsule.radius), static_cast<int>(horizontalLaserCapsule.radius), 0.0f, horizontalLaserCapsule.color, kFillModeWireFrame);
+				//Novice::DrawEllipse(static_cast<int>(horizontalLaserCapsule.start.x), static_cast<int>(horizontalLaserCapsule.start.y + 32), static_cast<int>(horizontalLaserCapsule.radius), static_cast<int>(horizontalLaserCapsule.radius), 0.0f, horizontalLaserCapsule.color, kFillModeWireFrame);
+				//Novice::DrawEllipse(static_cast<int>(horizontalLaserCapsule.end.x-32), static_cast<int>(horizontalLaserCapsule.end.y + 16), static_cast<int>(horizontalLaserCapsule.radius), static_cast<int>(horizontalLaserCapsule.radius), 0.0f, horizontalLaserCapsule.color, kFillModeWireFrame);
+			}
+			if (verticalLaserCapsule.end.y < 800) {
+				verticalLaser.move = 0;
+				verticalLaser.move += verticalLaser.move + 4;
+				Novice::DrawQuad(
+					static_cast<int>(verticalLaserCapsule.start.x) - 16, static_cast<int>(verticalLaserCapsule.start.y),
+					static_cast<int>(verticalLaserCapsule.end.x + verticalLaser.size) - 16, static_cast<int>(verticalLaserCapsule.start.y),
+					static_cast<int>(verticalLaserCapsule.start.x) - 16, static_cast<int>(verticalLaserCapsule.end.y += verticalLaser.move),
+					static_cast<int>(verticalLaserCapsule.end.x + verticalLaser.size) - 16, static_cast<int>(verticalLaserCapsule.end.y += verticalLaser.move),
+					0, 0, static_cast<int>(verticalLaser.size), static_cast<int>(verticalLaser.move),
+					verticalLaserGr, WHITE
+				);
+				//Novice::DrawEllipse(static_cast<int>(verticalLaserCapsule.start.x), static_cast<int>(verticalLaserCapsule.start.y), static_cast<int>(verticalLaserCapsule.radius), static_cast<int>(verticalLaserCapsule.radius), 0.0f, verticalLaserCapsule.color, kFillModeWireFrame);
+				//Novice::DrawEllipse(static_cast<int>(verticalLaserCapsule.end.x), static_cast<int>(verticalLaserCapsule.end.y - 16), static_cast<int>(verticalLaserCapsule.radius), static_cast<int>(verticalLaserCapsule.radius), 0.0f, verticalLaserCapsule.color, kFillModeWireFrame);
+				//Novice::ScreenPrintf(300, 300, "%f", verticalLaserCapsule.end.y);
 
+			}
+			//斜め向きのレーザー
+			if (obliqueLaserCapsule.end.y < 1000) {//obliqueLaserCapsule.end.x < 1024 ||
 
-					verticalLaser.move = 0;
-					verticalLaser.move += verticalLaser.move + 4;
-					Novice::DrawQuad(
-						static_cast<int>(verticalLaserCapsule.start.x) - 16, static_cast<int>(verticalLaserCapsule.start.y),
-						static_cast<int>(verticalLaserCapsule.end.x + verticalLaser.size) - 16, static_cast<int>(verticalLaserCapsule.start.y),
-						static_cast<int>(verticalLaserCapsule.start.x) - 16, static_cast<int>(verticalLaserCapsule.end.y += verticalLaser.move),
-						static_cast<int>(verticalLaserCapsule.end.x + verticalLaser.size) - 16, static_cast<int>(verticalLaserCapsule.end.y += verticalLaser.move),
-						0, 0, static_cast<int>(verticalLaser.size), static_cast<int>(verticalLaser.move),
-						verticalLaserGr, WHITE
-					);
-					//Novice::DrawEllipse(static_cast<int>(verticalLaserCapsule.start.x), static_cast<int>(verticalLaserCapsule.start.y), static_cast<int>(verticalLaserCapsule.radius), static_cast<int>(verticalLaserCapsule.radius), 0.0f, verticalLaserCapsule.color, kFillModeWireFrame);
-					//Novice::DrawEllipse(static_cast<int>(verticalLaserCapsule.end.x), static_cast<int>(verticalLaserCapsule.end.y - 16), static_cast<int>(verticalLaserCapsule.radius), static_cast<int>(verticalLaserCapsule.radius), 0.0f, verticalLaserCapsule.color, kFillModeWireFrame);
-					Novice::ScreenPrintf(300, 300, "%f", verticalLaserCapsule.end.y);
-
-				}
-				//斜め向きのレーザー
-				if (obliqueLaserCapsule.end.y < 1000) {//obliqueLaserCapsule.end.x < 1024 ||
-
-					obliqueLaser.move = 0;
-					obliqueLaser.move += obliqueLaser.move + 3;
-					//Novice::DrawEllipse(static_cast<int>(obliqueLaserCapsule.start.x), static_cast<int>(obliqueLaserCapsule.start.y), static_cast<int>(obliqueLaserCapsule.radius), static_cast<int>(obliqueLaserCapsule.radius), 0.0f, obliqueLaserCapsule.color, kFillModeWireFrame);
-					//Novice::DrawEllipse(static_cast<int>(obliqueLaserCapsule.end.x += obliqueLaser.move), static_cast<int>(obliqueLaserCapsule.end.y += obliqueLaser.move), static_cast<int>(obliqueLaserCapsule.radius), static_cast<int>(obliqueLaserCapsule.radius), 0.0f, obliqueLaserCapsule.color, kFillModeWireFrame);
-					Novice::DrawSprite(static_cast<int>(obliqueLaserCapsule.end.x += obliqueLaser.move) - 1024, static_cast<int>(obliqueLaserCapsule.end.y += obliqueLaser.move) - 1024, obliqueLaserGr, 1.0f, 1.0f, 0.0f, WHITE);
-				}
+				obliqueLaser.move = 0;
+				obliqueLaser.move += obliqueLaser.move + 3;
+				//Novice::DrawEllipse(static_cast<int>(obliqueLaserCapsule.start.x), static_cast<int>(obliqueLaserCapsule.start.y), static_cast<int>(obliqueLaserCapsule.radius), static_cast<int>(obliqueLaserCapsule.radius), 0.0f, obliqueLaserCapsule.color, kFillModeWireFrame);
+				//Novice::DrawEllipse(static_cast<int>(obliqueLaserCapsule.end.x += obliqueLaser.move), static_cast<int>(obliqueLaserCapsule.end.y += obliqueLaser.move), static_cast<int>(obliqueLaserCapsule.radius), static_cast<int>(obliqueLaserCapsule.radius), 0.0f, obliqueLaserCapsule.color, kFillModeWireFrame);
+				Novice::DrawSprite(static_cast<int>(obliqueLaserCapsule.end.x += obliqueLaser.move) - 1024, static_cast<int>(obliqueLaserCapsule.end.y += obliqueLaser.move) - 1024, obliqueLaserGr, 1.0f, 1.0f, 0.0f, WHITE);
+			}
 
 #pragma endregion
 
 
 #pragma region bullet描画
 
-				for (int i = 0; i < maxBullet; i++) {
-					if (bulletVertical[i].isHit == true) {
-						Novice::DrawSprite(
-							static_cast<int>(bulletVertical[i].pos.x - 32), static_cast<int>(bulletVertical[i].pos.y - 32),
-							Bullet, 1.0f, 1.0f, 0.0f, WHITE);
+			for (int i = 0; i < maxBullet; i++) {
+				if (bulletVertical[i].isHit == true) {
+					Novice::DrawSprite(
+						static_cast<int>(bulletVertical[i].pos.x - 32), static_cast<int>(bulletVertical[i].pos.y - 32),
+						Bullet, 1.0f, 1.0f, 0.0f, WHITE);
 
-
-					}
-					if (bulletBeside[i].isHit == true) {
-						Novice::DrawSprite(
-							static_cast<int>(bulletBeside[i].pos.x - 32), static_cast<int>(bulletBeside[i].pos.y - 32),
-							Bullet, 1.0f, 1.0f, 0.0f, WHITE);
-
-
-					}
-
-					if (bulletDiagonal[i].isHit == true) {
-						Novice::DrawSprite(
-							static_cast<int>(bulletDiagonal[i].pos.x - 32), static_cast<int>(bulletDiagonal[i].pos.y - 32),
-							Bullet, 1.0f, 1.0f, 0.0f, WHITE);
-
-
-					}
 
 				}
+				if (bulletBeside[i].isHit == true) {
+					Novice::DrawSprite(
+						static_cast<int>(bulletBeside[i].pos.x - 32), static_cast<int>(bulletBeside[i].pos.y - 32),
+						Bullet, 1.0f, 1.0f, 0.0f, WHITE);
+
+
+				}
+
+				if (bulletDiagonal[i].isHit == true) {
+					Novice::DrawSprite(
+						static_cast<int>(bulletDiagonal[i].pos.x - 32), static_cast<int>(bulletDiagonal[i].pos.y - 32),
+						Bullet, 1.0f, 1.0f, 0.0f, WHITE);
+
+
+				}
+
+			}
 
 #pragma endregion
 
 
-			}
+		}
 
 
-			if (player.isHit == true) {
+		if (player.isHit == true) {
 
+			Novice::DrawBox(
+				static_cast<int>(player.pos.x), static_cast<int>(player.pos.y),
+				static_cast<int>(player.width), static_cast<int>(player.height),
+				0.0f, WHITE, kFillModeSolid);
+
+
+		} else if (player.lifeCount >= 0) {
+
+			if (player.lifeCount % 10 == 0) {
 				Novice::DrawBox(
 					static_cast<int>(player.pos.x), static_cast<int>(player.pos.y),
 					static_cast<int>(player.width), static_cast<int>(player.height),
-					0.0f, WHITE, kFillModeSolid);
-
-
-			}
-			else if (player.lifeCount >= 0) {
-
-				if (player.lifeCount % 10 == 0) {
-					Novice::DrawBox(
-						static_cast<int>(player.pos.x), static_cast<int>(player.pos.y),
-						static_cast<int>(player.width), static_cast<int>(player.height),
-						0.0f, RED, kFillModeSolid);
-				}
-
+					0.0f, RED, kFillModeSolid);
 			}
 
-			//デバッグ用の描画
-
-
-
-
-	///
-	/// ↑描画処理ここまで
-	///
-
-	// フレームの終了
-			Novice::EndFrame();
-
-			// ESCキーが押されたらループを抜ける
-			if (preKeys[DIK_ESCAPE] == 0 && keys[DIK_ESCAPE] != 0) {
-				break;
-			}
 		}
 
-		// ライブラリの終了
-		Novice::Finalize();
-		return 0;
+		//デバッグ用の描画
+
+
+
+
+///
+/// ↑描画処理ここまで
+///
+
+// フレームの終了
+		Novice::EndFrame();
+
+		// ESCキーが押されたらループを抜ける
+		if (preKeys[DIK_ESCAPE] == 0 && keys[DIK_ESCAPE] != 0) {
+			break;
+		}
 	}
+
+	// ライブラリの終了
+	Novice::Finalize();
+	return 0;
+}
