@@ -267,9 +267,34 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int clearGraph = Novice::LoadTexture("./Resources/clear.png");
 	int badEndGraph = Novice::LoadTexture("./Resources/ButtEnd.png");
 
+#pragma region 数字の画像
+
+	int numberGraph[10] = {};
+	numberGraph[0] = Novice::LoadTexture("./Resources/num0.png");
+	numberGraph[1] = Novice::LoadTexture("./Resources/num1.png");
+	numberGraph[2] = Novice::LoadTexture("./Resources/num2.png");
+	numberGraph[3] = Novice::LoadTexture("./Resources/num3.png");
+	numberGraph[4] = Novice::LoadTexture("./Resources/num4.png");
+	numberGraph[5] = Novice::LoadTexture("./Resources/num5.png");
+	numberGraph[6] = Novice::LoadTexture("./Resources/num6.png");
+	numberGraph[7] = Novice::LoadTexture("./Resources/num7.png");
+	numberGraph[8] = Novice::LoadTexture("./Resources/num8.png");
+	numberGraph[9] = Novice::LoadTexture("./Resources/num9.png");
+
+#pragma endregion
+
+	//タイム
+	const int timeGraphWidth = 32;
+	const int arrayTimeNum = 2;
+	int timeNumberArray[arrayTimeNum]{};
+	int minutes = 5400;
+	int times = 0;
+
+	//ブロック
 	int blockSize = 32;
 	int blockNum = 0;
 
+	//マップ
 	int map[23][40] = {
 		{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 		{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -351,6 +376,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		if (scene == GAMESCENE)
 		{
+
+#pragma region タイム計算・表示
+			minutes -= 1;
+			times = minutes / 60;
+
+			timeNumberArray[0] = times / 10;
+			times %= 10;
+
+			timeNumberArray[1] = times;
+#pragma endregion
+
 			atacckTimer++;
 			bulletShootTimer++;
 			if (bulletShootTimer >= 0)
@@ -976,10 +1012,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			break;
 		case GAMESCENE:
 			Novice::ScreenPrintf(0, 0, "gamescene");
-			if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
+			if (minutes <= 0) {
 				scene = CLEAR;
 			}
-
+			if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
+				scene = GAMEOVER;
+			}
 			break;
 		case GAMEOVER:
 			Novice::DrawSprite(0, 0, badEndGraph, 1.0f, 1.0f, 0.0f, WHITE);
@@ -1111,6 +1149,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma endregion
 
+			//タイム
+			for (int i = 0; i < arrayTimeNum; i++) {
+				Novice::DrawSprite(640 + timeGraphWidth * i - timeGraphWidth, timeGraphWidth,
+					numberGraph[timeNumberArray[i]], 0.5f, 0.5f, 0.0f, 0xFFFFFFFF);
+			}
 
 		}
 
