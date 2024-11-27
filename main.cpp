@@ -270,6 +270,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int clearGraph = Novice::LoadTexture("./Resources/clear.png");
 	int badEndGraph = Novice::LoadTexture("./Resources/ButtEnd.png");
 
+	int backspaceGraph = Novice::LoadTexture("./Resources/backspace.png");
+	int enterGraph = Novice::LoadTexture("./Resources/enter.png");
+	int goTitleGraph = Novice::LoadTexture("./Resources/goTitle.png");
+	int ruleGraph = Novice::LoadTexture("./Resources/rule.png");
+	int yazirusiGraph = Novice::LoadTexture("./Resources/yazirusi.png");
+	int gameplayGraph = Novice::LoadTexture("./Resources/gameplay.png");
+
 #pragma region 数字の画像
 
 	int numberGraph[10] = {};
@@ -1066,7 +1073,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		switch (scene) {
 		case TITLE:
-			Novice::DrawSprite(0, 0, titleGraph, 1.0f, 1.0f, 0.0f, WHITE);
 			if (keys[DIK_BACKSPACE] && !preKeys[DIK_BACKSPACE]) {
 				scene = EXPLAIN;
 			}
@@ -1085,6 +1091,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				Novice::StopAudio(playHandleBGM);
 				scene = CLEAR;
 			}
+			if (keys[DIK_BACKSPACE] && !preKeys[DIK_BACKSPACE]) {
+				Novice::StopAudio(playHandleBGM);
+				scene = CLEAR;
+			}
 			if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
 				Novice::StopAudio(playHandleBGM);
 				scene = GAMEOVER;
@@ -1096,7 +1106,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			break;
 		case GAMEOVER:
-			Novice::DrawSprite(0, 0, badEndGraph, 1.0f, 1.0f, 0.0f, WHITE);
 			if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
 				Novice::StopAudio(playHandleBGM);
 				scene = TITLE;
@@ -1104,7 +1113,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			break;
 		case CLEAR:
-			Novice::DrawSprite(0, 0, clearGraph, 1.0f, 1.0f, 0.0f, WHITE);
 			if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
 				scene = TITLE;
 			}
@@ -1126,8 +1134,22 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
+		if (scene == TITLE) {
+			Novice::DrawSprite(0, 0, titleGraph, 1.0f, 1.0f, 0.0f, WHITE);
+			Novice::DrawSprite(700, 550, backspaceGraph, 1.0f, 1.0f, 0.0f, WHITE);
+			Novice::DrawSprite(950, 550, yazirusiGraph, 0.9f, 0.9f, 0.0f, WHITE);
+			Novice::DrawSprite(1020, 550, ruleGraph, 0.9f, 0.9f, 0.0f, WHITE);
+			Novice::DrawSprite(700, 620, enterGraph, 0.8f, 0.8f, 0.0f, WHITE);
+			Novice::DrawSprite(900, 620, yazirusiGraph, 0.9f, 0.9f, 0.0f, WHITE);
+			Novice::DrawSprite(1000, 620, gameplayGraph, 1.0f, 1.0f, 0.0f, WHITE);
+			
+		}
+
 		if (scene == EXPLAIN) {
 			Novice::DrawSprite(0, 0, explainGraph, 1.0f, 1.0f, 0.0f, WHITE);
+			Novice::DrawSprite(700, 630, backspaceGraph, 1.0f, 1.0f, 0.0f, WHITE);
+			Novice::DrawSprite(950, 630, yazirusiGraph, 0.9f, 0.9f, 0.0f, WHITE);
+			Novice::DrawSprite(1020, 630, goTitleGraph, 0.9f, 0.9f, 0.0f, WHITE);
 		}
 
 		if (scene == GAMESCENE) {
@@ -1260,7 +1282,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 		}
 
+		if (scene == GAMEOVER) {
+			Novice::DrawSprite(0, 0, badEndGraph, 1.0f, 1.0f, 0.0f, WHITE);
+			Novice::DrawSprite(750, 630, enterGraph, 0.8f, 0.8f, 0.0f, WHITE);
+			Novice::DrawSprite(950, 630, yazirusiGraph, 0.9f, 0.9f, 0.0f, WHITE);
+			Novice::DrawSprite(1020, 630, goTitleGraph, 0.9f, 0.9f, 0.0f, WHITE);
+		}
 
+		if (scene == CLEAR) {
+			Novice::DrawSprite(0, 0, clearGraph, 1.0f, 1.0f, 0.0f, WHITE);
+			Novice::DrawSprite(750, 630, enterGraph, 0.8f, 0.8f, 0.0f, WHITE);
+			Novice::DrawSprite(950, 630, yazirusiGraph, 0.9f, 0.9f, 0.0f, WHITE);
+			Novice::DrawSprite(1020, 630, goTitleGraph, 0.9f, 0.9f, 0.0f, WHITE);
+		}
 
 
 
