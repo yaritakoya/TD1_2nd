@@ -429,7 +429,59 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			obliqueLaserCapsule.end = { obliqueLaserCapsule.start.x + 1024, obliqueLaserCapsule.start.y + 1024 };
 			obliqueLaserCapsule.radius = { 32.0f };
 #pragma endregion
+#pragma region bullet
+			//横散弾
+			for (int i = 0; i < maxBullet; i++) {
+				bulletBeside[i].pos = { 1250.0f,360.0f };
+				bulletBeside[i].prePoint;
+				bulletBeside[i].fixedPos = { 1200.0f,360.0f };
+				bulletBeside[i].move;
+				bulletBeside[i].radius = 30.0f;
+				bulletBeside[i].speed = 0.0f;
+				bulletBeside[i].velocity = 20.0f;
+				bulletBeside[i].isHit = false;
+				bulletBeside[i].length = 0.0f;
+				bulletBeside[i].theta = 0.0f;
+				bulletBeside[i].coolTime = 30.0f;
 
+				bulletBeside[i].distance;
+			}
+			//縦散弾
+			for (int i = 0; i < maxBullet; i++) {
+				bulletVertical[i].pos = { 640.0f,30.0f };
+				bulletVertical[i].prePoint;
+				bulletVertical[i].fixedPos = { 640.0f,30.0f };
+				bulletVertical[i].move;
+				bulletVertical[i].radius = 30.0f;
+				bulletVertical[i].speed = 0.0f;
+				bulletVertical[i].velocity = 10.0f;
+				bulletVertical[i].isHit = false;
+				bulletVertical[i].length = 0.0f;
+				bulletVertical[i].theta = 0.0f;
+				bulletVertical[i].coolTime = 30.0f;
+				bulletVertical[i].distance;
+			}
+			//斜め散弾
+			for (int i = 0; i < maxBullet; i++) {
+				bulletDiagonal[i].pos = { 1250.0f,30.0f };
+				bulletDiagonal[i].prePoint;
+				bulletDiagonal[i].fixedPos = { 1250.0f,30.0f };
+				bulletDiagonal[i].move;
+				bulletDiagonal[i].radius = 30.0f;
+				bulletDiagonal[i].speed = 0.0f;
+				bulletDiagonal[i].velocity = 10.0f;
+				bulletDiagonal[i].isHit = false;
+				bulletDiagonal[i].length = 0.0f;
+				bulletDiagonal[i].theta = 0.0f;
+				bulletDiagonal[i].coolTime = 30.0f;
+				bulletDiagonal[i].distance;
+
+			}
+			attackTimer = 0.0f;
+		    shotBesideFlag = 0;
+		    shotVerticalFlag = 0;
+		    shotDiagonalFlag = 0;
+#pragma endregion
 
 		}
 
