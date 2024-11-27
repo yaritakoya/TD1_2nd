@@ -364,7 +364,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	player.life = 2;
 
 	int flameCountSlime = 0;
-
+	int stageTimer = 5400;
 
 
 	player.subPos = { player.pos.x + player.width / 2,player.pos.y + player.height / 2 };
@@ -393,7 +393,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		if (scene == GAMESCENE)
 		{
-
+			stageTimer--;
 #pragma region タイム計算・表示
 			minutes -= 1;
 			times = minutes / 60;
@@ -457,7 +457,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 				}
 			}				//横散弾
-			if (atacckTimer >= 180) {
+			if (atacckTimer >= 1800) {
 				shotBesideFlag = true;
 				if (shotBesideFlag == true) {
 					if (bullretBesideCount < 6) {
@@ -515,7 +515,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 
 			//斜め散弾
-			if (atacckTimer >= 360) {
+			if (atacckTimer >= 3600) {
 				shotDiagonalFlag = true;
 				if (shotDiagonalFlag == true) {
 					if (bullretDiagonalCount < 6) {
@@ -1057,6 +1057,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			if (player.life == 0) {
 				scene = GAMEOVER;
+			}
+			if (stageTimer <= 0) {
+				scene = CLEAR;
 			}
 			break;
 		case GAMEOVER:
