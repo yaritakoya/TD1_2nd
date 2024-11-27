@@ -114,7 +114,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		bulletBeside[i].radius = 30.0f;
 		bulletBeside[i].speed = 0.0f;
 		bulletBeside[i].velocity = 20.0f;
-		bulletBeside[i].isHit = true;
+		bulletBeside[i].isHit = false;
 		bulletBeside[i].length = 0.0f;
 		bulletBeside[i].theta = 0.0f;
 		bulletBeside[i].coolTime = 30.0f;
@@ -132,7 +132,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		bulletVertical[i].radius = 30.0f;
 		bulletVertical[i].speed = 0.0f;
 		bulletVertical[i].velocity = 10.0f;
-		bulletVertical[i].isHit = true;
+		bulletVertical[i].isHit = false;
 		bulletVertical[i].length = 0.0f;
 		bulletVertical[i].theta = 0.0f;
 		bulletVertical[i].coolTime = 30.0f;
@@ -154,7 +154,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		bulletDiagonal[i].radius = 30.0f;
 		bulletDiagonal[i].speed = 0.0f;
 		bulletDiagonal[i].velocity = 10.0f;
-		bulletDiagonal[i].isHit = true;
+		bulletDiagonal[i].isHit = false;
 		bulletDiagonal[i].length = 0.0f;
 		bulletDiagonal[i].theta = 0.0f;
 		bulletDiagonal[i].coolTime = 30.0f;
@@ -168,7 +168,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	float bullretBesideCount = 0.0f;
 	float bullretVerticalCount = 0.0f;
 	float bullretDiagonalCount = 0.0f;
-	float bulletShootTimer = 0.0f;
 	float atacckTimer = 0.0f;
 	//タイマーフラグ
 	bool shotBesideFlag = 0;
@@ -406,25 +405,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma endregion
 
 			atacckTimer++;
-			bulletShootTimer++;
-			if (bulletShootTimer >= 0)
-			{
-				shotVerticalFlag = true;
-			}
-			if (bulletShootTimer >= 180)
-			{
-				shotBesideFlag = true;
-			}
-			if (bulletShootTimer >= 360) {
-				shotDiagonalFlag = true;
-			}
+			
 #pragma region bullet
 			//縦散弾
 			if (atacckTimer >= 0.0f) {
+				shotVerticalFlag = true;
 				if (shotVerticalFlag == true) {
 					if (bullretVerticalCount < 6) {
 						for (int i = 0; i < maxBullet; i++) {
-
+							bulletVertical[i].isHit = shotVerticalFlag;
 							//回転
 							bulletVertical[i].theta = (6.0f - i) / 12.0f * float(M_PI);//1/6～8/6の角度
 							bulletVertical[i].move.x = cosf(bulletVertical[i].theta) - sinf(bulletVertical[i].theta);
@@ -468,10 +457,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 				}
 			}				//横散弾
-			if (atacckTimer >= 1800) {
+			if (atacckTimer >= 180) {
+				shotBesideFlag = true;
 				if (shotBesideFlag == true) {
 					if (bullretBesideCount < 6) {
 						for (int i = 0; i < maxBullet; i++) {
+							bulletBeside[i].isHit = shotBesideFlag;
 							if (coolTimeBeside % 1 == 0) {
 								//回転
 								bulletBeside[i].theta = (10.0f - i) / 12.0f * float(M_PI);//1/6～8/6の角度
@@ -524,11 +515,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 
 			//斜め散弾
-			if (atacckTimer >= 3600) {
+			if (atacckTimer >= 360) {
+				shotDiagonalFlag = true;
 				if (shotDiagonalFlag == true) {
 					if (bullretDiagonalCount < 6) {
 						for (int i = 0; i < maxBullet; i++) {
-
+							bulletDiagonal[i].isHit = shotDiagonalFlag;
 							//回転
 							bulletDiagonal[i].theta = (9.0f - i) / 12.0f * float(M_PI);//1/6～8/6の角度
 							bulletDiagonal[i].move.x = cosf(bulletDiagonal[i].theta) - sinf(bulletDiagonal[i].theta);
@@ -1170,14 +1162,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma region bullet描画
 
 			for (int i = 0; i < maxBullet; i++) {
-				if (bulletVertical[i].isHit == true) {
+				if (bulletVertical[i].isHit == true || shotVerticalFlag == true) {
 					Novice::DrawSprite(
 						static_cast<int>(bulletVertical[i].pos.x - 32), static_cast<int>(bulletVertical[i].pos.y - 32),
 						Bullet, 1.0f, 1.0f, 0.0f, WHITE);
 
 
 				}
-				if (bulletBeside[i].isHit == true) {
+				if (bulletBeside[i].isHit == true || shotBesideFlag == true) {
 					Novice::DrawSprite(
 						static_cast<int>(bulletBeside[i].pos.x - 32), static_cast<int>(bulletBeside[i].pos.y - 32),
 						Bullet, 1.0f, 1.0f, 0.0f, WHITE);
@@ -1185,7 +1177,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				}
 
-				if (bulletDiagonal[i].isHit == true) {
+				if (bulletDiagonal[i].isHit == true || shotDiagonalFlag == true) {
 					Novice::DrawSprite(
 						static_cast<int>(bulletDiagonal[i].pos.x - 32), static_cast<int>(bulletDiagonal[i].pos.y - 32),
 						Bullet, 1.0f, 1.0f, 0.0f, WHITE);
