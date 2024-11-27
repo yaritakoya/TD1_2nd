@@ -411,6 +411,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			horizontalLaserCapsule.start = { -1000 ,-1000 };// float(rand() % 720 + 40)
 			horizontalLaserCapsule.end = { -1000,horizontalLaserCapsule.start.y + 32 };
 			horizontalLaserCapsule.radius = { 32.0f };
+			horizontalLaserLineVector = { 0.0f,0.0f };
+			horizontalLaserUnitVector = { 0,0 };
+			horizontalLaserToCenter = { 0,0 };
+			horizontalLaserClosestPoint = { 0,0 };
+			horizontalLaserClosestPointToCenter = { 0,0 };
+			horizontalLaserLength = 0.0f;
+			horizontalLaserDot = 0.0f;
+			horizontalLaserSumRadius = 0.0f;
 
 			verticalLaser.size = 64.0f;//元の画像サイズ
 			verticalLaser.pos = { 0.0f,0.0f };//画面の位置
@@ -420,6 +428,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			verticalLaserCapsule.start = { float(rand() % 1200 + 40) ,-100 };
 			verticalLaserCapsule.end = { verticalLaserCapsule.start.x + 32,-100 };
 			verticalLaserCapsule.radius = { 32.0f };
+			verticalLaserLineVector = {};
+			verticalLaserUnitVector = {};
+			verticalLaserToCenter = {};
+			verticalLaserClosestPoint = {};
+			verticalLaserClosestPointToCenter = {};
+			verticalLaserLength = 0.0f;
+			verticalLaserDot = 0.0f;
+			verticalLaserSumRadius = 0.0f;
+
 
 			obliqueLaser.size = 128.0f;
 			obliqueLaser.pos = { 0.0f,0.0f };
@@ -428,6 +445,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			obliqueLaserCapsule.start = { float(rand() % 1200),0 };
 			obliqueLaserCapsule.end = { obliqueLaserCapsule.start.x + 1024, obliqueLaserCapsule.start.y + 1024 };
 			obliqueLaserCapsule.radius = { 32.0f };
+			obliqueLaserLineVector = {};
+			obliqueLaserUnitVector = {};
+			obliqueLaserToCenter = {};
+			obliqueLaserClosestPoint = {};
+			obliqueLaserClosestPointToCenter = {};
+			obliqueLaserLength = 0.0f;
+			obliqueLaserDot = 0.0f;
+			obliqueLaserSumRadius = 0.0f;
 #pragma endregion
 #pragma region bullet
 			//横散弾
@@ -478,9 +503,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			}
 			attackTimer = 0.0f;
-		    shotBesideFlag = 0;
-		    shotVerticalFlag = 0;
-		    shotDiagonalFlag = 0;
+			shotBesideFlag = 0;
+			shotVerticalFlag = 0;
+			shotDiagonalFlag = 0;
 #pragma endregion
 
 		}
