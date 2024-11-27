@@ -29,7 +29,7 @@ typedef struct Player {
 	float width;
 	float radius;
 	bool isHit;
-	int life = 1;
+	int life;
 	int jumpCount;
 	int rect;
 	int moveSpeed;
@@ -362,6 +362,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	player.radius = 25.0f;
 	player.isHit = true;
 	player.lifeCount = 200;
+	player.life = 2;
 
 	int flameCountSlime = 0;
 
@@ -595,6 +596,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (bulletBeside[i].isHit == true) {
 						if (bulletBeside[i].distance < player.radius + bulletBeside[i].radius) {
 							bulletBeside[i].isHit = false;
+							player.life -= 1;
 							player.isHit = false;
 							bullretBesideCount++;
 							if (bullretBesideCount == maxBullet) {
@@ -621,6 +623,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (bulletDiagonal[i].isHit == true) {
 						if (bulletDiagonal[i].distance < player.radius + bulletDiagonal[i].radius) {
 							bulletDiagonal[i].isHit = false;
+							player.life -= 1;
 							player.isHit = false;
 							bullretDiagonalCount++;
 							if (bullretDiagonalCount == maxBullet) {
@@ -645,6 +648,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (bulletVertical[i].isHit == true) {
 						if (bulletVertical[i].distance < player.radius + bulletVertical[i].radius) {
 							bulletVertical[i].isHit = false;
+							player.life -= 1;
 							player.isHit = false;
 							bullretVerticalCount++;
 
@@ -677,9 +681,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			if (player.isHit == false) {
 				player.lifeCount--;
+
 				if (player.lifeCount <= 0) {
 					player.isHit = true;
 					player.lifeCount = 200;
+					
+					
 				}
 			}
 #pragma endregion
@@ -1027,7 +1034,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma endregion
 
 		}
-
+		
 #pragma region シーンの切り替え
 
 		switch (scene)
@@ -1056,13 +1063,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
 				scene = GAMEOVER;
 			}
+			if (player.life == 0) {
+				scene = GAMEOVER;
+			}
 			break;
 		case GAMEOVER:
 			Novice::DrawSprite(0, 0, badEndGraph, 1.0f, 1.0f, 0.0f, WHITE);
 			if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
 				scene = TITLE;
 			}
-
+			
 			break;
 		case CLEAR:
 			Novice::DrawSprite(0, 0, clearGraph, 1.0f, 1.0f, 0.0f, WHITE);
