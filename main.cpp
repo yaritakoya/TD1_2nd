@@ -262,7 +262,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int Bullet = Novice::LoadTexture("./Resources/Bullet.png");//
 	//kint Bullet = Novice::LoadTexture("./Resources/Bullet.png");//
 
-
+	int titleGraph = Novice::LoadTexture("./Resources/title.png");
+	int clearGraph = Novice::LoadTexture("./Resources/clear.png");
+	int badEndGraph = Novice::LoadTexture("./Resources/ButtEnd.png");
 
 	int blockSize = 32;
 	int blockNum = 0;
@@ -927,16 +929,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		switch (scene)
 		{
 		case TITLE:
-			Novice::ScreenPrintf(0, 0, "title");
+			Novice::DrawSprite(0, 0, titleGraph, 1.0f, 1.0f, 0.0f, WHITE);
+			if (keys[DIK_BACKSPACE] && !preKeys[DIK_BACKSPACE]) {
+				scene = EXPLAIN;
+			}
 			if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
 				scene = GAMESCENE;
 			}
 
 			break;
 		case EXPLAIN:
-			Novice::ScreenPrintf(0, 0, "title");
-			if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
-				scene = GAMESCENE;
+			Novice::ScreenPrintf(0, 0, "EXPLAIN");
+			if (keys[DIK_BACKSPACE] && !preKeys[DIK_BACKSPACE]) {
+				scene = TITLE;
 			}
 			break;
 		case GAMESCENE:
@@ -947,14 +952,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			break;
 		case GAMEOVER:
-			Novice::ScreenPrintf(0, 0, "gameover");
+			Novice::DrawSprite(0, 0, badEndGraph, 1.0f, 1.0f, 0.0f, WHITE);
 			if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
 				scene = TITLE;
 			}
 
 			break;
 		case CLEAR:
-			Novice::ScreenPrintf(0, 0, "clear");
+			Novice::DrawSprite(0, 0, clearGraph, 1.0f, 1.0f, 0.0f, WHITE);
 			if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
 				scene = TITLE;
 			}
