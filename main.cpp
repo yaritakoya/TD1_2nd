@@ -33,10 +33,6 @@ typedef struct Player {
 	int jumpCount;
 	int rect;
 	int moveSpeed;
-
-
-
-
 	int lifeCount;
 
 }Ball;
@@ -93,7 +89,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		GAMEOVER,
 		CLEAR
 	};
-	int scene = GAMESCENE;
+	int scene = TITLE;
 
 	enum SLIME {
 		RIGHT,
@@ -405,7 +401,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma endregion
 
 			atacckTimer++;
-			
+
 #pragma region bullet
 			//縦散弾
 			if (atacckTimer >= 0.0f) {
@@ -684,8 +680,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				if (player.lifeCount <= 0) {
 					player.isHit = true;
 					player.lifeCount = 200;
-					
-					
+
+
 
 				}
 			}
@@ -698,8 +694,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//横向きのレーザー縦向きのレーザー
 
 			if (atacckTimer >= 1800) {
-				if (horizontalLaserCapsule.end.x < 1300)
-				{
+				if (horizontalLaserCapsule.end.x < 1300){
 					horizontalLaser.isShot = true;
 
 					horizontalLaserLineVector.x = horizontalLaserCapsule.end.x - horizontalLaserCapsule.start.x;
@@ -707,49 +702,44 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					horizontalLaserLength = sqrtf(horizontalLaserLineVector.x * horizontalLaserLineVector.x + horizontalLaserLineVector.y * horizontalLaserLineVector.y);
 
 
-				horizontalLaserLineVector.x = horizontalLaserCapsule.end.x - horizontalLaserCapsule.start.x;
-				horizontalLaserLineVector.y = horizontalLaserCapsule.end.y - horizontalLaserCapsule.start.y;
-				horizontalLaserLength = sqrtf(horizontalLaserLineVector.x * horizontalLaserLineVector.x + horizontalLaserLineVector.y * horizontalLaserLineVector.y);
+					horizontalLaserLineVector.x = horizontalLaserCapsule.end.x - horizontalLaserCapsule.start.x;
+					horizontalLaserLineVector.y = horizontalLaserCapsule.end.y - horizontalLaserCapsule.start.y;
+					horizontalLaserLength = sqrtf(horizontalLaserLineVector.x * horizontalLaserLineVector.x + horizontalLaserLineVector.y * horizontalLaserLineVector.y);
 
-				horizontalLaserUnitVector = horizontalLaserLineVector;
-				if (horizontalLaserLength != 0.0f)
-				{
-					horizontalLaserUnitVector.x = horizontalLaserLineVector.x / horizontalLaserLength;
-					horizontalLaserUnitVector.y = horizontalLaserLineVector.y / horizontalLaserLength;
+					horizontalLaserUnitVector = horizontalLaserLineVector;
+					if (horizontalLaserLength != 0.0f)
+					{
+						horizontalLaserUnitVector.x = horizontalLaserLineVector.x / horizontalLaserLength;
+						horizontalLaserUnitVector.y = horizontalLaserLineVector.y / horizontalLaserLength;
+					}
+
+					horizontalLaserToCenter.x = player.pos.x - horizontalLaserCapsule.start.x;
+					horizontalLaserToCenter.y = player.pos.y - horizontalLaserCapsule.start.y;
+
+					horizontalLaserDot = horizontalLaserToCenter.x * horizontalLaserUnitVector.x + horizontalLaserToCenter.y * horizontalLaserUnitVector.y;
+
+					horizontalLaserDot = fmaxf(0.0f, fminf(horizontalLaserDot, horizontalLaserLength));
+					horizontalLaserClosestPoint.x = horizontalLaserCapsule.start.x + horizontalLaserUnitVector.x * horizontalLaserDot;
+					horizontalLaserClosestPoint.y = horizontalLaserCapsule.start.y + horizontalLaserUnitVector.y * horizontalLaserDot;
+
+					horizontalLaserClosestPointToCenter.x = player.pos.x - horizontalLaserClosestPoint.x;
+					horizontalLaserClosestPointToCenter.y = player.pos.y - horizontalLaserClosestPoint.y;
+
+					horizontalLaserDot = sqrtf(horizontalLaserClosestPointToCenter.x * horizontalLaserClosestPointToCenter.x + horizontalLaserClosestPointToCenter.y * horizontalLaserClosestPointToCenter.y);
+
+
+					horizontalLaserSumRadius = player.radius + horizontalLaserCapsule.radius;
+
+					if (horizontalLaserDot < horizontalLaserSumRadius){
+						horizontalLaser.isShot = true;
+						player.isHit = false;
+					}
+				} else{
+					horizontalLaser.isShot = false;
+					horizontalLaserCapsule.start = { -64,float(rand() % 700 + 40) };
+					horizontalLaserCapsule.end = { -64,horizontalLaserCapsule.start.y + 32 };
+
 				}
-
-				horizontalLaserToCenter.x = player.pos.x - horizontalLaserCapsule.start.x;
-				horizontalLaserToCenter.y = player.pos.y - horizontalLaserCapsule.start.y;
-
-				horizontalLaserDot = horizontalLaserToCenter.x * horizontalLaserUnitVector.x + horizontalLaserToCenter.y * horizontalLaserUnitVector.y;
-
-				horizontalLaserDot = fmaxf(0.0f, fminf(horizontalLaserDot, horizontalLaserLength));
-				horizontalLaserClosestPoint.x = horizontalLaserCapsule.start.x + horizontalLaserUnitVector.x * horizontalLaserDot;
-				horizontalLaserClosestPoint.y = horizontalLaserCapsule.start.y + horizontalLaserUnitVector.y * horizontalLaserDot;
-
-				horizontalLaserClosestPointToCenter.x = player.pos.x - horizontalLaserClosestPoint.x;
-				horizontalLaserClosestPointToCenter.y = player.pos.y - horizontalLaserClosestPoint.y;
-
-				horizontalLaserDot = sqrtf(horizontalLaserClosestPointToCenter.x * horizontalLaserClosestPointToCenter.x + horizontalLaserClosestPointToCenter.y * horizontalLaserClosestPointToCenter.y);
-
-
-				horizontalLaserSumRadius = player.radius + horizontalLaserCapsule.radius;
-
-				if (horizontalLaserDot < horizontalLaserSumRadius)
-
-				{
-					horizontalLaser.isShot = true;
-        	player.isHit = false;
-				}
-			}
-			else
-			{
-				horizontalLaser.isShot = false;
-				horizontalLaserCapsule.start = { -64,float(rand() % 700 + 40) };
-				horizontalLaserCapsule.end = { -64,horizontalLaserCapsule.start.y + 32 };
-
-			}
-
 
 			}
 
@@ -759,42 +749,36 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma region レーザー当たり判定(縦)
 
 			if (atacckTimer >= 0.0f) {
-			
+				if (verticalLaserCapsule.end.y < 800){
+					verticalLaser.isShot = true;
+					//縦
+					verticalLaserLineVector.x = verticalLaserCapsule.end.x - verticalLaserCapsule.start.x;
+					verticalLaserLineVector.y = verticalLaserCapsule.end.y - verticalLaserCapsule.start.y;
+					verticalLaserLength = sqrtf(verticalLaserLineVector.x * verticalLaserLineVector.x + verticalLaserLineVector.y * verticalLaserLineVector.y);
 
+					verticalLaserUnitVector = verticalLaserLineVector;
+					if (verticalLaserLength != 0.0f){
+						verticalLaserUnitVector.x = verticalLaserLineVector.x / verticalLaserLength;
+						verticalLaserUnitVector.y = verticalLaserLineVector.y / verticalLaserLength;
+					}
 
-			if (verticalLaserCapsule.end.y < 800)
-			{
-				verticalLaser.isShot = true;
-				//縦
-				verticalLaserLineVector.x = verticalLaserCapsule.end.x - verticalLaserCapsule.start.x;
-				verticalLaserLineVector.y = verticalLaserCapsule.end.y - verticalLaserCapsule.start.y;
-				verticalLaserLength = sqrtf(verticalLaserLineVector.x * verticalLaserLineVector.x + verticalLaserLineVector.y * verticalLaserLineVector.y);
+					verticalLaserToCenter.x = player.pos.x - verticalLaserCapsule.start.x;
+					verticalLaserToCenter.y = player.pos.y - verticalLaserCapsule.start.y;
 
-				verticalLaserUnitVector = verticalLaserLineVector;
-				if (verticalLaserLength != 0.0f)
+					verticalLaserDot = verticalLaserToCenter.x * verticalLaserUnitVector.x + verticalLaserToCenter.y * verticalLaserUnitVector.y;
 
-				{
-					verticalLaserUnitVector.x = verticalLaserLineVector.x / verticalLaserLength;
-					verticalLaserUnitVector.y = verticalLaserLineVector.y / verticalLaserLength;
-				}
+					verticalLaserDot = fmaxf(0.0f, fminf(verticalLaserDot, verticalLaserLength));
+					verticalLaserClosestPoint.x = verticalLaserCapsule.start.x + verticalLaserUnitVector.x * verticalLaserDot;
+					verticalLaserClosestPoint.y = verticalLaserCapsule.start.y + verticalLaserUnitVector.y * verticalLaserDot;
 
-				verticalLaserToCenter.x = player.pos.x - verticalLaserCapsule.start.x;
-				verticalLaserToCenter.y = player.pos.y - verticalLaserCapsule.start.y;
+					verticalLaserClosestPointToCenter.x = player.pos.x - verticalLaserClosestPoint.x;
+					verticalLaserClosestPointToCenter.y = player.pos.y - verticalLaserClosestPoint.y;
 
-				verticalLaserDot = verticalLaserToCenter.x * verticalLaserUnitVector.x + verticalLaserToCenter.y * verticalLaserUnitVector.y;
+					verticalLaserDot = sqrtf(verticalLaserClosestPointToCenter.x * verticalLaserClosestPointToCenter.x + verticalLaserClosestPointToCenter.y * verticalLaserClosestPointToCenter.y);
 
-				verticalLaserDot = fmaxf(0.0f, fminf(verticalLaserDot, verticalLaserLength));
-				verticalLaserClosestPoint.x = verticalLaserCapsule.start.x + verticalLaserUnitVector.x * verticalLaserDot;
-				verticalLaserClosestPoint.y = verticalLaserCapsule.start.y + verticalLaserUnitVector.y * verticalLaserDot;
+					verticalLaserSumRadius = player.radius + verticalLaserCapsule.radius;
 
-				verticalLaserClosestPointToCenter.x = player.pos.x - verticalLaserClosestPoint.x;
-				verticalLaserClosestPointToCenter.y = player.pos.y - verticalLaserClosestPoint.y;
-
-				verticalLaserDot = sqrtf(verticalLaserClosestPointToCenter.x * verticalLaserClosestPointToCenter.x + verticalLaserClosestPointToCenter.y * verticalLaserClosestPointToCenter.y);
-
-				verticalLaserSumRadius = player.radius + verticalLaserCapsule.radius;
-
-          if (verticalLaserDot < verticalLaserSumRadius){
+					if (verticalLaserDot < verticalLaserSumRadius) {
 						verticalLaser.isShot = true;
 						player.isHit = false;
 					}
@@ -802,9 +786,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 					verticalLaser.isShot = false;
 
-verticalLaserCapsule.start = { float(rand() % 1200 + 0) ,-64 };
-verticalLaserCapsule.end = { verticalLaserCapsule.start.x + 32,-60 };
-verticalLaserCapsule.radius = { 32.0f };
+					verticalLaserCapsule.start = { float(rand() % 1200 + 0) ,-64 };
+					verticalLaserCapsule.end = { verticalLaserCapsule.start.x + 32,-60 };
+					verticalLaserCapsule.radius = { 32.0f };
 				}
 			}
 
@@ -812,48 +796,41 @@ verticalLaserCapsule.radius = { 32.0f };
 
 #pragma region レーザー当たり判定(斜め)
 			if (atacckTimer >= 3600) {
-			
+				if (obliqueLaserCapsule.end.y < 1000){//obliqueLaserCapsule.end.x<1024||
+					obliqueLaser.isShot = true;
 
-			if (obliqueLaserCapsule.end.y < 1000)//obliqueLaserCapsule.end.x<1024||
-			{
-				obliqueLaser.isShot = true;
+					obliqueLaserLineVector.x = obliqueLaserCapsule.end.x - obliqueLaserCapsule.start.x;
+					obliqueLaserLineVector.y = obliqueLaserCapsule.end.y - obliqueLaserCapsule.start.y;
+					obliqueLaserLength = sqrtf(obliqueLaserLineVector.x * obliqueLaserLineVector.x + obliqueLaserLineVector.y * obliqueLaserLineVector.y);
 
+					obliqueLaserUnitVector = obliqueLaserLineVector;
+					if (obliqueLaserLength != 0.0f){
+						obliqueLaserUnitVector.x = obliqueLaserLineVector.x / obliqueLaserLength;
+						obliqueLaserUnitVector.y = obliqueLaserLineVector.y / obliqueLaserLength;
+					}
 
-				obliqueLaserLineVector.x = obliqueLaserCapsule.end.x - obliqueLaserCapsule.start.x;
-				obliqueLaserLineVector.y = obliqueLaserCapsule.end.y - obliqueLaserCapsule.start.y;
-				obliqueLaserLength = sqrtf(obliqueLaserLineVector.x * obliqueLaserLineVector.x + obliqueLaserLineVector.y * obliqueLaserLineVector.y);
+					obliqueLaserToCenter.x = player.pos.x - obliqueLaserCapsule.start.x;
+					obliqueLaserToCenter.y = player.pos.y - obliqueLaserCapsule.start.y;
 
-				obliqueLaserUnitVector = obliqueLaserLineVector;
-				if (obliqueLaserLength != 0.0f)
-				{
-					obliqueLaserUnitVector.x = obliqueLaserLineVector.x / obliqueLaserLength;
-					obliqueLaserUnitVector.y = obliqueLaserLineVector.y / obliqueLaserLength;
-				}
+					obliqueLaserDot = obliqueLaserToCenter.x * obliqueLaserUnitVector.x + obliqueLaserToCenter.y * obliqueLaserUnitVector.y;
 
-				obliqueLaserToCenter.x = player.pos.x - obliqueLaserCapsule.start.x;
-				obliqueLaserToCenter.y = player.pos.y - obliqueLaserCapsule.start.y;
+					obliqueLaserDot = fmaxf(0.0f, fminf(obliqueLaserDot, obliqueLaserLength));
+					obliqueLaserClosestPoint.x = obliqueLaserCapsule.start.x + obliqueLaserUnitVector.x * obliqueLaserDot;
+					obliqueLaserClosestPoint.y = obliqueLaserCapsule.start.y + obliqueLaserUnitVector.y * obliqueLaserDot;
 
-				obliqueLaserDot = obliqueLaserToCenter.x * obliqueLaserUnitVector.x + obliqueLaserToCenter.y * obliqueLaserUnitVector.y;
+					obliqueLaserClosestPointToCenter.x = player.pos.x - obliqueLaserClosestPoint.x;
+					obliqueLaserClosestPointToCenter.y = player.pos.y - obliqueLaserClosestPoint.y;
 
-				obliqueLaserDot = fmaxf(0.0f, fminf(obliqueLaserDot, obliqueLaserLength));
-				obliqueLaserClosestPoint.x = obliqueLaserCapsule.start.x + obliqueLaserUnitVector.x * obliqueLaserDot;
-				obliqueLaserClosestPoint.y = obliqueLaserCapsule.start.y + obliqueLaserUnitVector.y * obliqueLaserDot;
+					obliqueLaserDot = sqrtf(obliqueLaserClosestPointToCenter.x * obliqueLaserClosestPointToCenter.x + obliqueLaserClosestPointToCenter.y * obliqueLaserClosestPointToCenter.y);
 
-				obliqueLaserClosestPointToCenter.x = player.pos.x - obliqueLaserClosestPoint.x;
-				obliqueLaserClosestPointToCenter.y = player.pos.y - obliqueLaserClosestPoint.y;
+					obliqueLaserSumRadius = player.radius + obliqueLaserCapsule.radius;
 
-				obliqueLaserDot = sqrtf(obliqueLaserClosestPointToCenter.x * obliqueLaserClosestPointToCenter.x + obliqueLaserClosestPointToCenter.y * obliqueLaserClosestPointToCenter.y);
-
-				obliqueLaserSumRadius = player.radius + obliqueLaserCapsule.radius;
-
-				if (obliqueLaserDot < obliqueLaserSumRadius) {
-
-
+					if (obliqueLaserDot < obliqueLaserSumRadius) {
 
 						obliqueLaser.isShot = true;
 						player.isHit = false;
 
-					
+					}
 				} else {
 					obliqueLaser.isShot = false;
 
@@ -861,9 +838,8 @@ verticalLaserCapsule.radius = { 32.0f };
 					obliqueLaserCapsule.end = { (obliqueLaserCapsule.start.x) + 720, (obliqueLaserCapsule.start.y) + 720 };
 					obliqueLaserCapsule.radius = { 32.0f };
 				}
-			}
 
-				
+			}
 
 
 #pragma endregion
@@ -995,7 +971,7 @@ verticalLaserCapsule.radius = { 32.0f };
 				if (map[int(player.pos.y / 32)][int(player.pos.x / 32 + 1.13f)] == 1) {
 					player.move.x -= 1.0f;
 				}
-	if (player.pos.x + player.width > 1280.0f) {
+				if (player.pos.x + player.width > 1280.0f) {
 					player.move.x -= 1.0f;
 				}
 			}
@@ -1058,58 +1034,55 @@ verticalLaserCapsule.radius = { 32.0f };
 
 #pragma region シーンの切り替え
 
-		switch (scene)
-		{
-		case TITLE:
-			Novice::DrawSprite(0, 0, titleGraph, 1.0f, 1.0f, 0.0f, WHITE);
-			if (keys[DIK_BACKSPACE] && !preKeys[DIK_BACKSPACE]) {
-				scene = EXPLAIN;
-			}
-			if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
-				scene = GAMESCENE;
-			}
+			switch (scene){
+			case TITLE:
+				Novice::DrawSprite(0, 0, titleGraph, 1.0f, 1.0f, 0.0f, WHITE);
+				if (keys[DIK_BACKSPACE] && !preKeys[DIK_BACKSPACE]) {
+					scene = EXPLAIN;
+				}
+				if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
+					scene = GAMESCENE;
+				}
 
-			break;
-		case EXPLAIN:
-			Novice::ScreenPrintf(0, 0, "EXPLAIN");
-			if (keys[DIK_BACKSPACE] && !preKeys[DIK_BACKSPACE]) {
-				scene = TITLE;
-			}
-			break;
-		case GAMESCENE:
-			Novice::ScreenPrintf(0, 0, "gamescene");
-			if (minutes <= 0) {
-				scene = CLEAR;
-			}
-			if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
-				scene = GAMEOVER;
-			}
-			if (player.life == 0) {
-				scene = GAMEOVER;
+				break;
+			case EXPLAIN:
+				Novice::ScreenPrintf(0, 0, "EXPLAIN");
+				if (keys[DIK_BACKSPACE] && !preKeys[DIK_BACKSPACE]) {
+					scene = TITLE;
+				}
+				break;
+			case GAMESCENE:
+				Novice::ScreenPrintf(0, 0, "gamescene");
+				if (minutes <= 0) {
+					scene = CLEAR;
+				}
+				if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
+					scene = GAMEOVER;
+				}
+				if (player.life == 0) {
+					scene = GAMEOVER;
 
-			}
-			if (stageTimer <= 0) {
-				scene = CLEAR;
-			}
-			break;
-		case GAMEOVER:
-			Novice::DrawSprite(0, 0, badEndGraph, 1.0f, 1.0f, 0.0f, WHITE);
-			if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
-				scene = TITLE;
-			}
-			
-			break;
-		case CLEAR:
-			Novice::DrawSprite(0, 0, clearGraph, 1.0f, 1.0f, 0.0f, WHITE);
-			if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
-				scene = TITLE;
-			}
+				}
+				if (stageTimer <= 0) {
+					scene = CLEAR;
+				}
+				break;
+			case GAMEOVER:
+				Novice::DrawSprite(0, 0, badEndGraph, 1.0f, 1.0f, 0.0f, WHITE);
+				if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
+					scene = TITLE;
+				}
 
-			break;
-		}
+				break;
+			case CLEAR:
+				Novice::DrawSprite(0, 0, clearGraph, 1.0f, 1.0f, 0.0f, WHITE);
+				if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
+					scene = TITLE;
+				}
 
-			break;
-		}
+				break;
+			}
+		
 
 #pragma endregion
 
@@ -1126,8 +1099,7 @@ verticalLaserCapsule.radius = { 32.0f };
 
 
 
-		if (scene == GAMESCENE)
-		{
+		if (scene == GAMESCENE){
 
 #pragma region map描画
 
@@ -1140,8 +1112,6 @@ verticalLaserCapsule.radius = { 32.0f };
 					if (map[y][x] == 2) {
 						Novice::DrawSprite(x * blockSize, y * blockSize, block2, 1.0f, 1.0f, 0.0f, WHITE);
 					}
-
-
 				}
 			}
 
@@ -1152,8 +1122,7 @@ verticalLaserCapsule.radius = { 32.0f };
 
 			//レーザー
 
-			if (horizontalLaserCapsule.end.x < 1300){
-
+			if (horizontalLaserCapsule.end.x < 1300) {
 				horizontalLaser.move = 0;
 				horizontalLaser.move += horizontalLaser.move + 4;
 				Novice::DrawQuad(
@@ -1162,12 +1131,8 @@ verticalLaserCapsule.radius = { 32.0f };
 					static_cast<int>(horizontalLaserCapsule.start.x), static_cast<int>(horizontalLaserCapsule.end.y + horizontalLaser.size) - 16,
 					static_cast<int>(horizontalLaserCapsule.end.x += horizontalLaser.move), static_cast<int>(horizontalLaserCapsule.end.y + horizontalLaser.size) - 16,
 					0, 0, static_cast<int>(horizontalLaser.move), static_cast<int>(horizontalLaser.size),
-					horizontalLaserGr, WHITE
-				);
-
-				//Novice::DrawEllipse(static_cast<int>(horizontalLaserCapsule.start.x), static_cast<int>(horizontalLaserCapsule.start.y + 32), static_cast<int>(horizontalLaserCapsule.radius), static_cast<int>(horizontalLaserCapsule.radius), 0.0f, horizontalLaserCapsule.color, kFillModeWireFrame);
-				//Novice::DrawEllipse(static_cast<int>(horizontalLaserCapsule.end.x-32), static_cast<int>(horizontalLaserCapsule.end.y + 16), static_cast<int>(horizontalLaserCapsule.radius), static_cast<int>(horizontalLaserCapsule.radius), 0.0f, horizontalLaserCapsule.color, kFillModeWireFrame);
-
+					horizontalLaserGr, WHITE);
+				
 			}
 			if (verticalLaserCapsule.end.y < 800) {
 
@@ -1179,20 +1144,15 @@ verticalLaserCapsule.radius = { 32.0f };
 					static_cast<int>(verticalLaserCapsule.start.x) - 16, static_cast<int>(verticalLaserCapsule.end.y += verticalLaser.move),
 					static_cast<int>(verticalLaserCapsule.end.x + verticalLaser.size) - 16, static_cast<int>(verticalLaserCapsule.end.y += verticalLaser.move),
 					0, 0, static_cast<int>(verticalLaser.size), static_cast<int>(verticalLaser.move),
-					verticalLaserGr, WHITE
-				);
-				//Novice::DrawEllipse(static_cast<int>(verticalLaserCapsule.start.x), static_cast<int>(verticalLaserCapsule.start.y), static_cast<int>(verticalLaserCapsule.radius), static_cast<int>(verticalLaserCapsule.radius), 0.0f, verticalLaserCapsule.color, kFillModeWireFrame);
-				//Novice::DrawEllipse(static_cast<int>(verticalLaserCapsule.end.x), static_cast<int>(verticalLaserCapsule.end.y - 16), static_cast<int>(verticalLaserCapsule.radius), static_cast<int>(verticalLaserCapsule.radius), 0.0f, verticalLaserCapsule.color, kFillModeWireFrame);
+					verticalLaserGr, WHITE);
 
 
 			}
 			//斜め向きのレーザー
-			if (obliqueLaserCapsule.end.y < 1000) {//obliqueLaserCapsule.end.x < 1024 ||
+			if (obliqueLaserCapsule.end.y < 1000) { //obliqueLaserCapsule.end.x < 1024 ||
 
 				obliqueLaser.move = 0;
-				obliqueLaser.move += obliqueLaser.move + 3;
-				//Novice::DrawEllipse(static_cast<int>(obliqueLaserCapsule.start.x), static_cast<int>(obliqueLaserCapsule.start.y), static_cast<int>(obliqueLaserCapsule.radius), static_cast<int>(obliqueLaserCapsule.radius), 0.0f, obliqueLaserCapsule.color, kFillModeWireFrame);
-				//Novice::DrawEllipse(static_cast<int>(obliqueLaserCapsule.end.x += obliqueLaser.move), static_cast<int>(obliqueLaserCapsule.end.y += obliqueLaser.move), static_cast<int>(obliqueLaserCapsule.radius), static_cast<int>(obliqueLaserCapsule.radius), 0.0f, obliqueLaserCapsule.color, kFillModeWireFrame);
+				obliqueLaser.move += obliqueLaser.move + 3;	
 				Novice::DrawSprite(static_cast<int>(obliqueLaserCapsule.end.x += obliqueLaser.move) - 1024, static_cast<int>(obliqueLaserCapsule.end.y += obliqueLaser.move) - 1024, obliqueLaserGr, 1.0f, 1.0f, 0.0f, WHITE);
 			}
 
@@ -1240,51 +1200,33 @@ verticalLaserCapsule.radius = { 32.0f };
 				flameCountSlime = 0;
 			}
 			if (player.isHit == true) {
-
-
 				if (SLIME == RIGHT) {
 					Novice::DrawSpriteRect(
 						static_cast<int>(player.pos.x - 5), static_cast<int>(player.pos.y) - 15,
-						32 * (flameCountSlime / 5), 0, 32, 32, slimeRight, 0.15f, 1.5f, 0.0f, WHITE
-					);
+						32 * (flameCountSlime / 5), 0, 32, 32, slimeRight, 0.15f, 1.5f, 0.0f, WHITE);
 				}
 				if (SLIME == LEFT) {
 					Novice::DrawSpriteRect(
 						static_cast<int>(player.pos.x) - 5, static_cast<int>(player.pos.y) - 15,
-						32 * (flameCountSlime / 5), 0, 32, 32, slimeLeft, 0.15f, 1.5f, 0.0f, WHITE
-					);
+						32 * (flameCountSlime / 5), 0, 32, 32, slimeLeft, 0.15f, 1.5f, 0.0f, WHITE);
 				}
-
-			}
-			else if (player.lifeCount >= 0) {
+			} else if (player.lifeCount >= 0) {
 				if (player.lifeCount % 10 == 0) {
-					
 
 					if (SLIME == RIGHT) {
 						Novice::DrawSpriteRect(
 							static_cast<int>(player.pos.x) - 5, static_cast<int>(player.pos.y) - 15,
-							32 * (flameCountSlime / 5), 0, 32, 32, slimeRight, 0.15f, 1.5f, 0.0f, WHITE
-						);
+							32 * (flameCountSlime / 5), 0, 32, 32, slimeRight, 0.15f, 1.5f, 0.0f, WHITE);
 					}
 					if (SLIME == LEFT) {
 						Novice::DrawSpriteRect(
 							static_cast<int>(player.pos.x) - 5, static_cast<int>(player.pos.y) - 15,
-							32 * (flameCountSlime / 5), 0, 32, 32, slimeLeft, 0.15f, 1.5f, 0.0f, WHITE
-						);
+							32 * (flameCountSlime / 5), 0, 32, 32, slimeLeft, 0.15f, 1.5f, 0.0f, WHITE);
 					}
 				}
-
-
-
-
-
 			}
 		}
 
-
-
-
-		//デバッグ用の描画
 
 
 
