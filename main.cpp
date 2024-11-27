@@ -79,7 +79,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//横
 	Bullet bulletBeside[maxBullet] = {};
 	for (int i = 0; i < maxBullet; i++) {
-		bulletBeside[i].pos = { 1200.0f,360.0f };
+		bulletBeside[i].pos = { 1250.0f,360.0f };
 		bulletBeside[i].prePoint;
 		bulletBeside[i].fixedPos = { 1200.0f,360.0f };
 		bulletBeside[i].move;
@@ -264,8 +264,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 							if (bulletVertical[i].length >= 1.0f) {
 								bulletVertical[i].move.x /= bulletVertical[i].length;
 								bulletVertical[i].move.y /= bulletVertical[i].length;
-								bulletVertical[i].pos.x += bulletVertical[i].move.x * (bulletVertical[i].speed + rand() % 15 + 1);
-								bulletVertical[i].pos.y += bulletVertical[i].move.y * (bulletVertical[i].speed + rand() % 9 + 1);
+								bulletVertical[i].pos.x += bulletVertical[i].move.x * (bulletVertical[i].speed + rand() % 10 + 1);
+								bulletVertical[i].pos.y += bulletVertical[i].move.y * (bulletVertical[i].speed + rand() % 5 + 1);
 							}
 						}
 						if (bulletVertical[i].pos.x <= 0.0f || bulletVertical[i].pos.y <= 0.0f || bulletVertical[i].pos.y >= 720.0f || bulletVertical[i].pos.x >= 1280.0f) {
@@ -313,8 +313,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 								if (bulletBeside[i].length >= 1.0f) {
 									bulletBeside[i].move.x /= bulletBeside[i].length;
 									bulletBeside[i].move.y /= bulletBeside[i].length;
-									bulletBeside[i].pos.x += bulletBeside[i].move.x * (bulletBeside[i].speed + rand() % 13 + 1);
-									bulletBeside[i].pos.y += bulletBeside[i].move.y * (bulletBeside[i].speed + rand() % 9 + 1);
+									bulletBeside[i].pos.x += bulletBeside[i].move.x * (bulletBeside[i].speed + rand() % 5 + 1);
+									bulletBeside[i].pos.y += bulletBeside[i].move.y * (bulletBeside[i].speed + rand() % 8 + 1);
 								}
 							}
 							if (bulletBeside[i].pos.x < 0.0f || bulletBeside[i].pos.x > 1280.0f || bulletBeside[i].pos.y < 0.0f || bulletBeside[i].pos.y > 720.0f) {
@@ -326,7 +326,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 									bulletBeside[i].isHit = true;
 									bullretBesideCount = 0;
 									for (int j = 0; j < maxBullet; j++) {
-										bulletBeside[j].pos = { 1200.0f,360.0f };
+										bulletBeside[j].pos = { 1250.0f,360.0f };
 										bulletBeside[j].prePoint;
 										bulletBeside[j].fixedPos = { 1200.0f,360.0f };
 										bulletBeside[j].move;
@@ -367,8 +367,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 							if (bulletDiagonal[i].length >= 1.0f) {
 								bulletDiagonal[i].move.x /= bulletDiagonal[i].length;
 								bulletDiagonal[i].move.y /= bulletDiagonal[i].length;
-								bulletDiagonal[i].pos.x += bulletDiagonal[i].move.x * (bulletDiagonal[i].speed + rand() % 13 + 1);
-								bulletDiagonal[i].pos.y += bulletDiagonal[i].move.y * (bulletDiagonal[i].speed + rand() % 13 + 1);
+								bulletDiagonal[i].pos.x += bulletDiagonal[i].move.x * (bulletDiagonal[i].speed + rand() % 14 + 1);
+								bulletDiagonal[i].pos.y += bulletDiagonal[i].move.y * (bulletDiagonal[i].speed + rand() % 14 + 1);
 							}
 						}
 						if (bulletDiagonal[i].pos.x <= 0.0f || bulletDiagonal[i].pos.y <= 0.0f || bulletDiagonal[i].pos.y >= 720.0f || bulletDiagonal[i].pos.x >= 1280.0f) {
