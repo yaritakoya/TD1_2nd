@@ -187,8 +187,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	horizontalLaser.coolTime = 5;
 
 	LaserCapsule horizontalLaserCapsule = {};
-	horizontalLaserCapsule.start = { -100 , float(rand() % 720 + 40) };
-	horizontalLaserCapsule.end = { -100,horizontalLaserCapsule.start.y + 32 };
+	horizontalLaserCapsule.start = { -1000 ,-1000 };// float(rand() % 720 + 40)
+	horizontalLaserCapsule.end = { -1000,horizontalLaserCapsule.start.y + 32 };
 	horizontalLaserCapsule.radius = { 32.0f };
 	horizontalLaserCapsule.color = WHITE;
 
@@ -234,7 +234,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	obliqueLaser.size = 128.0f;
 	obliqueLaser.pos = { 0.0f,0.0f };
 	obliqueLaser.move = 0;
-	obliqueLaser.isShot = false;
+	obliqueLaser.isShot = true;
 	obliqueLaser.coolTime = 5;
 
 	//カプセル(斜め)
@@ -588,7 +588,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (bulletBeside[i].isHit == true) {
 						if (bulletBeside[i].distance < player.radius + bulletBeside[i].radius) {
 							bulletBeside[i].isHit = false;
+
 							player.life -= 1;
+
 							player.isHit = false;
 							bullretBesideCount++;
 							if (bullretBesideCount == maxBullet) {
@@ -615,7 +617,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (bulletDiagonal[i].isHit == true) {
 						if (bulletDiagonal[i].distance < player.radius + bulletDiagonal[i].radius) {
 							bulletDiagonal[i].isHit = false;
+
 							player.life -= 1;
+
 							player.isHit = false;
 							bullretDiagonalCount++;
 							if (bullretDiagonalCount == maxBullet) {
@@ -640,7 +644,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (bulletVertical[i].isHit == true) {
 						if (bulletVertical[i].distance < player.radius + bulletVertical[i].radius) {
 							bulletVertical[i].isHit = false;
+
 							player.life -= 1;
+
 							player.isHit = false;
 							bullretVerticalCount++;
 
@@ -674,11 +680,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			if (player.isHit == false) {
 				player.lifeCount--;
 
+
 				if (player.lifeCount <= 0) {
 					player.isHit = true;
 					player.lifeCount = 200;
 					
 					
+
 				}
 			}
 #pragma endregion
@@ -688,9 +696,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma region レーザー当たり判定(横)
 
 			//横向きのレーザー縦向きのレーザー
-			if (horizontalLaserCapsule.end.x < 1300)
-			{
-				horizontalLaser.isShot = true;
+
+			if (atacckTimer >= 1800) {
+				if (horizontalLaserCapsule.end.x < 1300)
+				{
+					horizontalLaser.isShot = true;
+
+					horizontalLaserLineVector.x = horizontalLaserCapsule.end.x - horizontalLaserCapsule.start.x;
+					horizontalLaserLineVector.y = horizontalLaserCapsule.end.y - horizontalLaserCapsule.start.y;
+					horizontalLaserLength = sqrtf(horizontalLaserLineVector.x * horizontalLaserLineVector.x + horizontalLaserLineVector.y * horizontalLaserLineVector.y);
+
 
 				horizontalLaserLineVector.x = horizontalLaserCapsule.end.x - horizontalLaserCapsule.start.x;
 				horizontalLaserLineVector.y = horizontalLaserCapsule.end.y - horizontalLaserCapsule.start.y;
@@ -717,12 +732,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				horizontalLaserDot = sqrtf(horizontalLaserClosestPointToCenter.x * horizontalLaserClosestPointToCenter.x + horizontalLaserClosestPointToCenter.y * horizontalLaserClosestPointToCenter.y);
 
+
 				horizontalLaserSumRadius = player.radius + horizontalLaserCapsule.radius;
 
 				if (horizontalLaserDot < horizontalLaserSumRadius)
+
 				{
 					horizontalLaser.isShot = true;
-
+        	player.isHit = false;
 				}
 			}
 			else
@@ -733,9 +750,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			}
 
+
+			}
+
+
 #pragma endregion
 
 #pragma region レーザー当たり判定(縦)
+
+			if (atacckTimer >= 0.0f) {
+			
+
 
 			if (verticalLaserCapsule.end.y < 800)
 			{
@@ -747,6 +772,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				verticalLaserUnitVector = verticalLaserLineVector;
 				if (verticalLaserLength != 0.0f)
+
 				{
 					verticalLaserUnitVector.x = verticalLaserLineVector.x / verticalLaserLength;
 					verticalLaserUnitVector.y = verticalLaserLineVector.y / verticalLaserLength;
@@ -768,28 +794,30 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				verticalLaserSumRadius = player.radius + verticalLaserCapsule.radius;
 
-				if (verticalLaserDot < verticalLaserSumRadius)
-				{
+          if (verticalLaserDot < verticalLaserSumRadius){
+						verticalLaser.isShot = true;
+						player.isHit = false;
+					}
+				} else {
 
-					verticalLaser.isShot = true;
+					verticalLaser.isShot = false;
+
+verticalLaserCapsule.start = { float(rand() % 1200 + 0) ,-64 };
+verticalLaserCapsule.end = { verticalLaserCapsule.start.x + 32,-60 };
+verticalLaserCapsule.radius = { 32.0f };
 				}
-			}
-			else
-			{
-				verticalLaser.isShot = false;
-
-				verticalLaserCapsule.start = { float(rand() % 1200 + 0) ,-64 };
-				verticalLaserCapsule.end = { verticalLaserCapsule.start.x + 32,-60 };
-				verticalLaserCapsule.radius = { 32.0f };
 			}
 
 #pragma endregion
 
 #pragma region レーザー当たり判定(斜め)
+			if (atacckTimer >= 3600) {
+			
 
 			if (obliqueLaserCapsule.end.y < 1000)//obliqueLaserCapsule.end.x<1024||
 			{
 				obliqueLaser.isShot = true;
+
 
 				obliqueLaserLineVector.x = obliqueLaserCapsule.end.x - obliqueLaserCapsule.start.x;
 				obliqueLaserLineVector.y = obliqueLaserCapsule.end.y - obliqueLaserCapsule.start.y;
@@ -821,17 +849,22 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				if (obliqueLaserDot < obliqueLaserSumRadius) {
 
 
-					obliqueLaser.isShot = true;
 
+						obliqueLaser.isShot = true;
+						player.isHit = false;
+
+					
+				} else {
+					obliqueLaser.isShot = false;
+
+					obliqueLaserCapsule.start = { float(rand() % 1200 + 40) - 1024 ,-1024 };
+					obliqueLaserCapsule.end = { (obliqueLaserCapsule.start.x) + 720, (obliqueLaserCapsule.start.y) + 720 };
+					obliqueLaserCapsule.radius = { 32.0f };
 				}
 			}
-			else {
-				obliqueLaser.isShot = false;
 
-				obliqueLaserCapsule.start = { float(rand() % 1200 + 40) - 1024 ,-1024 };
-				obliqueLaserCapsule.end = { (obliqueLaserCapsule.start.x) + 720, (obliqueLaserCapsule.start.y) + 720 };
-				obliqueLaserCapsule.radius = { 32.0f };
-			}
+				
+
 
 #pragma endregion
 
@@ -885,6 +918,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					blockNum = 7;
 					player.pos.y = float(blockNum * 32);
 				}
+
 			}
 
 			//右下
@@ -909,6 +943,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					player.pos.y = float(blockNum * 32);
 				}
 
+
 			}
 
 
@@ -922,12 +957,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					player.pos.y = float(blockNum * 32);
 				}
 
+
 			}
 
 #pragma endregion
 
 
 #pragma region 自機の移動
+
 
 
 			player.move.x = 0.0f;
@@ -954,23 +991,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				player.move.x += 1.0f;
 				SLIME = RIGHT;
 				flameCountSlime++;
+
 				if (map[int(player.pos.y / 32)][int(player.pos.x / 32 + 1.13f)] == 1) {
 					player.move.x -= 1.0f;
 				}
-
-			}
-
-
-
-			if (keys[DIK_D] || keys[DIK_RIGHT]) {
-				player.move.x += 1.0f;
-				if (map[int(player.pos.y / 32)][int(player.pos.x / 32 + 1.13f)] == 1) {
-					player.move.x -= 1.0f;
-				}
-				if (player.pos.x + player.width > 1280.0f) {
+	if (player.pos.x + player.width > 1280.0f) {
 					player.move.x -= 1.0f;
 				}
 			}
+
 
 			player.lenght = sqrtf(player.move.x * player.move.x + player.move.y * player.move.y);
 			if (player.lenght != 0.0f) {
@@ -1026,7 +1055,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma endregion
 
 		}
-		
+
 #pragma region シーンの切り替え
 
 		switch (scene)
@@ -1057,6 +1086,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			if (player.life == 0) {
 				scene = GAMEOVER;
+
 			}
 			if (stageTimer <= 0) {
 				scene = CLEAR;
@@ -1074,6 +1104,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
 				scene = TITLE;
 			}
+
+			break;
+		}
 
 			break;
 		}
@@ -1102,10 +1135,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				for (int x = 0; x < 40; x++) {
 					if (map[y][x] == 1) {
 						Novice::DrawSprite(x * blockSize, y * blockSize, block1, 1.0f, 1.0f, 0.0f, WHITE);
+
 					}
 					if (map[y][x] == 2) {
 						Novice::DrawSprite(x * blockSize, y * blockSize, block2, 1.0f, 1.0f, 0.0f, WHITE);
 					}
+
 
 				}
 			}
@@ -1116,8 +1151,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma region レーザー描画
 
 			//レーザー
-			if (horizontalLaserCapsule.end.x < 1300 || verticalLaserCapsule.end.y < 800)
-			{
+
+			if (horizontalLaserCapsule.end.x < 1300){
 
 				horizontalLaser.move = 0;
 				horizontalLaser.move += horizontalLaser.move + 4;
@@ -1133,6 +1168,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				//Novice::DrawEllipse(static_cast<int>(horizontalLaserCapsule.start.x), static_cast<int>(horizontalLaserCapsule.start.y + 32), static_cast<int>(horizontalLaserCapsule.radius), static_cast<int>(horizontalLaserCapsule.radius), 0.0f, horizontalLaserCapsule.color, kFillModeWireFrame);
 				//Novice::DrawEllipse(static_cast<int>(horizontalLaserCapsule.end.x-32), static_cast<int>(horizontalLaserCapsule.end.y + 16), static_cast<int>(horizontalLaserCapsule.radius), static_cast<int>(horizontalLaserCapsule.radius), 0.0f, horizontalLaserCapsule.color, kFillModeWireFrame);
 
+			}
+			if (verticalLaserCapsule.end.y < 800) {
 
 				verticalLaser.move = 0;
 				verticalLaser.move += verticalLaser.move + 4;
@@ -1146,7 +1183,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				);
 				//Novice::DrawEllipse(static_cast<int>(verticalLaserCapsule.start.x), static_cast<int>(verticalLaserCapsule.start.y), static_cast<int>(verticalLaserCapsule.radius), static_cast<int>(verticalLaserCapsule.radius), 0.0f, verticalLaserCapsule.color, kFillModeWireFrame);
 				//Novice::DrawEllipse(static_cast<int>(verticalLaserCapsule.end.x), static_cast<int>(verticalLaserCapsule.end.y - 16), static_cast<int>(verticalLaserCapsule.radius), static_cast<int>(verticalLaserCapsule.radius), 0.0f, verticalLaserCapsule.color, kFillModeWireFrame);
-				Novice::ScreenPrintf(300, 300, "%f", verticalLaserCapsule.end.y);
+
 
 			}
 			//斜め向きのレーザー
@@ -1170,7 +1207,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						static_cast<int>(bulletVertical[i].pos.x - 32), static_cast<int>(bulletVertical[i].pos.y - 32),
 						Bullet, 1.0f, 1.0f, 0.0f, WHITE);
 
-
 				}
 				if (bulletBeside[i].isHit == true || shotBesideFlag == true) {
 					Novice::DrawSprite(
@@ -1191,6 +1227,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 
 #pragma endregion
+
 
 			//タイム
 			for (int i = 0; i < arrayTimeNum; i++) {
@@ -1246,7 +1283,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 
+
 		//デバッグ用の描画
+
 
 
 
@@ -1257,6 +1296,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 // フレームの終了
 		Novice::EndFrame();
+
 
 		// ESCキーが押されたらループを抜ける
 		if (preKeys[DIK_ESCAPE] == 0 && keys[DIK_ESCAPE] != 0) {
