@@ -29,7 +29,7 @@ typedef struct Player {
 	float width;
 	float radius;
 	bool isHit;
-	int life;
+	int life = 1;
 	int jumpCount;
 	int rect;
 	int moveSpeed;
@@ -94,6 +94,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		CLEAR
 	};
 	int scene = GAMESCENE;
+
+	enum SLIME {
+		RIGHT,
+		LEFT
+	};
+	int SLIME = RIGHT;
 
 	//Bullet
 	const int maxBullet = 6;
@@ -294,7 +300,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int blockSize = 32;
 	int blockNum = 0;
 
+
+	int slimeRight = Novice::LoadTexture("./Resources/slimeRight.png");
+	int slimeLeft = Novice::LoadTexture("./Resources/slime.png");
+
+
+
 	//マップ
+
 	int map[23][40] = {
 		{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 		{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -342,12 +355,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	player.rect = 100;
 	player.moveSpeed = 5;
 
+	
 
 
 
 	player.radius = 25.0f;
 	player.isHit = true;
 	player.lifeCount = 200;
+
+	int flameCountSlime = 0;
+	
 
 
 	player.subPos = { player.pos.x + player.width / 2,player.pos.y + player.height / 2 };
@@ -910,19 +927,37 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma region 自機の移動
 
-			player.move.x = 0.0f;
-			player.move.y = 0.0f;
 
+				player.move.x = 0.0f;
+				player.move.y = 0.0f;
+				
+				
+				if (flameCountSlime / 5 == 8) {
+					flameCountSlime = 0;
+				}
+				
+				/*if (flameCountSlime >= 9) {
+					flameCountSlime = 0;
+				}*/
+				if (keys[DIK_A] || keys[DIK_LEFT]) {
+					player.move.x -= 1.0f;
+					SLIME = LEFT;
+					flameCountSlime++;
+					if (map[int(player.pos.y / 32)][int(player.pos.x / 32 - 0.13f)] == 1) {
+						player.move.x += 1.0f;
+					}
+				}
 
-			if (keys[DIK_A] || keys[DIK_LEFT]) {
-				player.move.x -= 1.0f;
-				if (map[int(player.pos.y / 32)][int(player.pos.x / 32 - 0.13f)] == 1) {
+				if (keys[DIK_D] || keys[DIK_RIGHT]) {
 					player.move.x += 1.0f;
+					SLIME = RIGHT;
+					flameCountSlime++;
+					if (map[int(player.pos.y / 32)][int(player.pos.x / 32 + 1.13f)] == 1) {
+						player.move.x -= 1.0f;
+					}
+
 				}
-				if (player.pos.x < 0.0f) {
-					player.move.x += 1.0f;
-				}
-			}
+				
 
 
 			if (keys[DIK_D] || keys[DIK_RIGHT]) {
@@ -1155,27 +1190,54 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					numberGraph[timeNumberArray[i]], 0.5f, 0.5f, 0.0f, 0xFFFFFFFF);
 			}
 
-		}
 
-
-		if (player.isHit == true) {
-
-			Novice::DrawBox(
-				static_cast<int>(player.pos.x), static_cast<int>(player.pos.y),
-				static_cast<int>(player.width), static_cast<int>(player.height),
-				0.0f, WHITE, kFillModeSolid);
-
+			if (keys[DIK_A] && keys[DIK_D] || keys[DIK_LEFT] && keys[DIK_RIGHT]) {
+				flameCountSlime = 0;
+			}
+			if (player.isHit == true) {
+				
+			
+				if (SLIME == RIGHT) {
+					Novice::DrawSpriteRect(
+						static_cast<int>(player.pos.x-5), static_cast<int>(player.pos.y)-15,
+						32 * (flameCountSlime / 5),0 ,32, 32, slimeRight, 0.15f, 1.5f, 0.0f, WHITE
+					);
+				}
+				if (SLIME == LEFT) {
+					Novice::DrawSpriteRect(
+						static_cast<int>(player.pos.x)-5, static_cast<int>(player.pos.y)-15,
+						32 * (flameCountSlime / 5), 0, 32, 32, slimeLeft, 0.15f, 1.5f, 0.0f, WHITE
+					);
+				}
 
 		} else if (player.lifeCount >= 0) {
+				if (player.lifeCount % 10 == 0) {
+					Novice::DrawBox(
+						static_cast<int>(player.pos.x), static_cast<int>(player.pos.y),
+						static_cast<int>(player.width), static_cast<int>(player.height),
+						0.0f, RED, kFillModeSolid);
+					
+					if (SLIME == RIGHT) {
+						Novice::DrawSpriteRect(
+							static_cast<int>(player.pos.x)-5, static_cast<int>(player.pos.y)-15,
+							32 * (flameCountSlime / 5), 0, 32, 32, slimeRight, 0.15f, 1.5f, 0.0f, WHITE
+						);
+					}
+					if (SLIME == LEFT) {
+						Novice::DrawSpriteRect(
+							static_cast<int>(player.pos.x)-5, static_cast<int>(player.pos.y)-15,
+							32 * (flameCountSlime / 5), 0, 32, 32, slimeLeft, 0.15f, 1.5f, 0.0f, WHITE
+						);
+					}
+				}
 
-			if (player.lifeCount % 10 == 0) {
-				Novice::DrawBox(
-					static_cast<int>(player.pos.x), static_cast<int>(player.pos.y),
-					static_cast<int>(player.width), static_cast<int>(player.height),
-					0.0f, RED, kFillModeSolid);
+	
+
+		
+
 			}
 
-		}
+		
 
 		//デバッグ用の描画
 
