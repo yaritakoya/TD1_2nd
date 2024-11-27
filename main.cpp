@@ -812,42 +812,65 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				}
 
-				//空中の床の当たり判定
-				//左下
-				if ((player.pos.x >= 7 * blockSize && player.pos.x < 15 * blockSize) &&
-					(player.pos.y >= 14 * blockSize && player.pos.y < 15 * blockSize)) {
-					blockNum = 13;
-					player.velocity.y = 0.0f;
-
+			//空中の床の当たり判定
+			//左下
+			if ((player.pos.x >= 7 * blockSize && player.pos.x < 15 * blockSize) &&
+				(player.pos.y >= 14 * blockSize && player.pos.y < 14.6f * blockSize)) {
+				blockNum = 13;
+				player.velocity.y = 0.0f;
+				if (keys[DIK_S] && keys[DIK_SPACE]) {
+					blockNum = 15;
+					player.pos.y = float(blockNum * 32);
 				}
-				//左上
-				if ((player.pos.x >= 7 * blockSize && player.pos.x < 15 * blockSize) &&
-					(player.pos.y >= 6 * blockSize && player.pos.y < 7 * blockSize)) {
-					blockNum = 5;
-					player.velocity.y = 0.0f;
-
+			}
+			//左上
+			if ((player.pos.x >= 7 * blockSize && player.pos.x < 15 * blockSize) &&
+				(player.pos.y >= 6 * blockSize && player.pos.y < 6.6f * blockSize)) {
+				blockNum = 5;
+				player.velocity.y = 0.0f;
+				if (keys[DIK_S] && keys[DIK_SPACE]) {
+					blockNum = 7;
+					player.pos.y = float(blockNum * 32);
 				}
 
-				//右下
-				if ((player.pos.x >= 24 * blockSize && player.pos.x < 32 * blockSize) &&
-					(player.pos.y >= 14 * blockSize && player.pos.y < 15 * blockSize)) {
-					blockNum = 13;
-					player.velocity.y = 0.0f;
-
-				}
-				//右上
-				if ((player.pos.x >= 24 * blockSize && player.pos.x < 32 * blockSize) &&
-					(player.pos.y >= 6 * blockSize && player.pos.y < 7 * blockSize)) {
-					blockNum = 5;
-					player.velocity.y = 0.0f;
 
 				}
 
-				//真ん中
-				if ((player.pos.x >= 13 * blockSize && player.pos.x < 26 * blockSize) &&
-					(player.pos.y >= 10 * blockSize && player.pos.y < 11 * blockSize)) {
-					blockNum = 9;
-					player.velocity.y = 0.0f;
+			//右下
+			if ((player.pos.x >= 24 * blockSize && player.pos.x < 32 * blockSize) &&
+				(player.pos.y >= 14 * blockSize && player.pos.y < 14.6f * blockSize)) {
+				blockNum = 13;
+				player.velocity.y = 0.0f;
+				if (keys[DIK_S] && keys[DIK_SPACE]) {
+					blockNum = 15;
+					player.pos.y = float(blockNum * 32);
+				}
+
+			}
+			//右上
+			if ((player.pos.x >= 24 * blockSize && player.pos.x < 32 * blockSize) &&
+				(player.pos.y >= 6 * blockSize && player.pos.y < 6.6f * blockSize)) {
+				blockNum = 5;
+				player.velocity.y = 0.0f;
+				if (keys[DIK_S] && keys[DIK_SPACE]) {
+					blockNum = 7;
+					player.pos.y = float(blockNum * 32);
+				}
+
+
+				}
+
+
+			//真ん中
+			if ((player.pos.x >= 13 * blockSize && player.pos.x < 26 * blockSize) &&
+				(player.pos.y >= 10 * blockSize && player.pos.y < 10.6f * blockSize)) {
+				blockNum = 9;
+				player.velocity.y = 0.0f;
+				if (keys[DIK_S] && keys[DIK_SPACE]) {
+					blockNum = 11;
+					player.pos.y = float(blockNum * 32);
+				}
+
 
 				}
 
@@ -912,21 +935,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
 					player.jumpCount++;
 				}
+      
+			//ボールの速度に加速度を足す
+			/*player.velocity.x -= player.acceleration.x;*/
+			player.velocity.y -= player.acceleration.y;
 
+			//ボールの位置に速度を足す
+			/*player.pos.x -= player.velocity.x;*/
+			player.pos.y -= player.velocity.y;
 
-				//ボールの速度に加速度を足す
-				player.velocity.x -= player.acceleration.x;
-				player.velocity.y -= player.acceleration.y;
+			if (player.pos.y >= player.height + blockNum * blockSize) {
+				player.pos.y = player.height + blockNum * blockSize;
+				player.jumpCount = 0;
+			}
 
-				//ボールの位置に速度を足す
-				player.pos.x -= player.velocity.x;
-				player.pos.y -= player.velocity.y;
-
-
-				if (player.pos.y >= player.height + blockNum * blockSize) {
-					player.pos.y = player.height + blockNum * blockSize;
-					player.jumpCount = 0;
-				}
 
 
 #pragma endregion
