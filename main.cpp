@@ -173,6 +173,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 #pragma region レーザー初期
+
 #pragma region 横向きレーザー初期
 	Laser horizontalLaser = {};
 	horizontalLaser.size = 64.0f;//元の画像サイズ
@@ -252,6 +253,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma endregion
 
 #pragma endregion
+
 #pragma region レーザー画像
 	int horizontalLaserGr = Novice::LoadTexture("./Resources/laser.png");
 	int verticalLaserGr = Novice::LoadTexture("./Resources/verticalLaser.png");
@@ -409,7 +411,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			minutes = 5400;
 			stageTimer = 5400;
 			attackTimer = 0;
+
 #pragma region laser
+
 			horizontalLaser.size = 64.0f;//元の画像サイズ
 			horizontalLaser.pos = { 0.0f,0.0f };//画面の上の位置
 			horizontalLaser.move = 0;//レーザーの描画範囲を動かす
@@ -460,8 +464,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			obliqueLaserLength = 0.0f;
 			obliqueLaserDot = 0.0f;
 			obliqueLaserSumRadius = 0.0f;
+
 #pragma endregion
+
 #pragma region bullet
+
 			//横散弾
 			for (int i = 0; i < maxBullet; i++) {
 				bulletBeside[i].pos = { 1250.0f,360.0f };
@@ -478,6 +485,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				bulletBeside[i].distance;
 			}
+
 			//縦散弾
 			for (int i = 0; i < maxBullet; i++) {
 				bulletVertical[i].pos = { 640.0f,30.0f };
@@ -493,6 +501,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				bulletVertical[i].coolTime = 30.0f;
 				bulletVertical[i].distance;
 			}
+
 			//斜め散弾
 			for (int i = 0; i < maxBullet; i++) {
 				bulletDiagonal[i].pos = { 1250.0f,30.0f };
@@ -509,16 +518,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				bulletDiagonal[i].distance;
 
 			}
+
 			attackTimer = 0.0f;
 			shotBesideFlag = 0;
 			shotVerticalFlag = 0;
 			shotDiagonalFlag = 0;
+
 #pragma endregion
 
 		}
 
-		if (scene == GAMESCENE)
-		{
+		if (scene == GAMESCENE){
+
 			//BGMの再生
 			if (!Novice::IsPlayingAudio(playHandleBGM)) {
 				playHandleBGM = Novice::PlayAudio(gamePlayBGM, false, 0.4f);
@@ -1190,7 +1201,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
 				scene = GAMESCENE;
 			}
-
 			break;
 		case EXPLAIN:
 			if (keys[DIK_BACKSPACE] && !preKeys[DIK_BACKSPACE]) {
@@ -1202,18 +1212,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				Novice::StopAudio(playHandleBGM);
 				scene = CLEAR;
 			}
-			if (keys[DIK_BACKSPACE] && !preKeys[DIK_BACKSPACE]) {
-				Novice::StopAudio(playHandleBGM);
-				scene = CLEAR;
-			}
-			if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
-				Novice::StopAudio(playHandleBGM);
-				scene = GAMEOVER;
-			}
 			if (player.life <= 0) {
 				Novice::StopAudio(playHandleBGM);
 				scene = GAMEOVER;
-
 			}
 			break;
 		case GAMEOVER:
@@ -1221,13 +1222,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				Novice::StopAudio(playHandleBGM);
 				scene = TITLE;
 			}
-
 			break;
 		case CLEAR:
 			if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
 				scene = TITLE;
 			}
-
 			break;
 		}
 
