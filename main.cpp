@@ -1010,19 +1010,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (bulletVertical[i].isHit == true) {
 						/*bullet[i].pos.y = 100.0f + i * 80.0f;*/
 						Novice::DrawSprite(
-							static_cast<int>(bulletVertical[i].pos.x - 25), static_cast<int>(bulletVertical[i].pos.y - 25),
+							static_cast<int>(bulletVertical[i].pos.x - 32), static_cast<int>(bulletVertical[i].pos.y - 32),
 							Bullet, 1.0f, 1.0f, 0.0f, WHITE);
 
 
-						/*Novice::DrawEllipse(
+						Novice::DrawEllipse(
 							static_cast<int>(bulletVertical[i].pos.x), static_cast<int>(bulletVertical[i].pos.y),
 							static_cast<int>(bulletVertical[i].radius), static_cast<int>(bulletVertical[i].radius),
-							1.0f, RED, kFillModeSolid);*/
+							1.0f, RED, kFillModeSolid);
 					}
 					if (bulletBeside[i].isHit == true) {
 						/*bullet[i].pos.y = 100.0f + i * 80.0f;*/
 						Novice::DrawSprite(
-							static_cast<int>(bulletBeside[i].pos.x - 25), static_cast<int>(bulletBeside[i].pos.y - 25),
+							static_cast<int>(bulletBeside[i].pos.x - 32), static_cast<int>(bulletBeside[i].pos.y - 32),
 							Bullet, 1.0f, 1.0f, 0.0f, WHITE);
 
 						/*	Novice::DrawEllipse(
@@ -1039,7 +1039,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (bulletDiagonal[i].isHit == true) {
 						/*bullet[i].pos.y = 100.0f + i * 80.0f;*/
 						Novice::DrawSprite(
-							static_cast<int>(bulletDiagonal[i].pos.x - 25), static_cast<int>(bulletDiagonal[i].pos.y - 25),
+							static_cast<int>(bulletDiagonal[i].pos.x - 32), static_cast<int>(bulletDiagonal[i].pos.y - 32),
 							Bullet, 1.0f, 1.0f, 0.0f, WHITE);
 
 
