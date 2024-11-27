@@ -402,6 +402,35 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			minutes = 5400;
 			stageTimer = 5400;
 			attackTimer = 0;
+#pragma region laser
+			horizontalLaser.size = 64.0f;//元の画像サイズ
+			horizontalLaser.pos = { 0.0f,0.0f };//画面の上の位置
+			horizontalLaser.move = 0;//レーザーの描画範囲を動かす
+			horizontalLaser.width = { 64.0f,64.0f };
+			horizontalLaser.isShot = true;
+			horizontalLaserCapsule.start = { -1000 ,-1000 };// float(rand() % 720 + 40)
+			horizontalLaserCapsule.end = { -1000,horizontalLaserCapsule.start.y + 32 };
+			horizontalLaserCapsule.radius = { 32.0f };
+
+			verticalLaser.size = 64.0f;//元の画像サイズ
+			verticalLaser.pos = { 0.0f,0.0f };//画面の位置
+			verticalLaser.move = 0;//レーザーの描画範囲を動かす
+			verticalLaser.width = { 64.0f,64.0f };
+			verticalLaser.isShot = true;
+			verticalLaserCapsule.start = { float(rand() % 1200 + 40) ,-100 };
+			verticalLaserCapsule.end = { verticalLaserCapsule.start.x + 32,-100 };
+			verticalLaserCapsule.radius = { 32.0f };
+
+			obliqueLaser.size = 128.0f;
+			obliqueLaser.pos = { 0.0f,0.0f };
+			obliqueLaser.move = 0;
+			obliqueLaser.isShot = true;
+			obliqueLaserCapsule.start = { float(rand() % 1200),0 };
+			obliqueLaserCapsule.end = { obliqueLaserCapsule.start.x + 1024, obliqueLaserCapsule.start.y + 1024 };
+			obliqueLaserCapsule.radius = { 32.0f };
+#pragma endregion
+
+
 		}
 
 		if (scene == GAMESCENE)
