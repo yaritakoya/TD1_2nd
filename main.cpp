@@ -4,7 +4,7 @@
 
 
 
-const char kWindowTitle[] = "LC1C_23_ヤリタ_コウヤ_タイトル";
+const char kWindowTitle[] = "1244_コバヤシ_ヤリタ_ヨシノ_スライムのプライドのために";
 
 typedef struct Vector2 {
 	float x;
@@ -76,7 +76,7 @@ typedef struct LaserCapsule {
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// ライブラリの初期化
-	Novice::Initialize(kWindowTitle, 1280, 736);
+	Novice::Initialize(kWindowTitle, 1280, 720);
 
 	// キー入力結果を受け取る箱
 	char keys[256] = { 0 };
@@ -164,7 +164,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	float bullretBesideCount = 0.0f;
 	float bullretVerticalCount = 0.0f;
 	float bullretDiagonalCount = 0.0f;
-	float atacckTimer = 0.0f;
+	float attackTimer = 0.0f;
 	//タイマーフラグ
 	bool shotBesideFlag = 0;
 	bool shotVerticalFlag = 0;
@@ -265,6 +265,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//kint Bullet = Novice::LoadTexture("./Resources/Bullet.png");//
 
 	int titleGraph = Novice::LoadTexture("./Resources/title.png");
+	int explainGraph = Novice::LoadTexture("./Resources/explanation.png");
+	int battleGraph = Novice::LoadTexture("./Resources/Bos.png");
 	int clearGraph = Novice::LoadTexture("./Resources/clear.png");
 	int badEndGraph = Novice::LoadTexture("./Resources/ButtEnd.png");
 
@@ -283,6 +285,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	numberGraph[9] = Novice::LoadTexture("./Resources/num9.png");
 
 #pragma endregion
+
+#pragma region BGM・SE変数
+
+	int playHandleBGM = -1;
+	//int playHandleSE = -1;
+
+	int gamePlayBGM = Novice::LoadAudio("./Resources/secondStage.wav");
+	int badEndBGM = Novice::LoadAudio("./Resources/bad.mp3");
+
+#pragma endregion
+
+
 
 	//タイム
 	const int timeGraphWidth = 32;
@@ -349,11 +363,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	player.jumpCount = 0;
 	player.rect = 100;
 	player.moveSpeed = 5;
-
-
-
-
-
 	player.radius = 25.0f;
 	player.isHit = true;
 	player.lifeCount = 200;
@@ -385,11 +394,25 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 
 
-
+		if (scene == TITLE) {
+			player.pos = { 64.0f,636.0f };
+			player.lifeCount = 200;
+			player.life = 2;
+			flameCountSlime = 0;
+			minutes = 5400;
+			stageTimer = 5400;
+			attackTimer = 0;
+		}
 
 		if (scene == GAMESCENE)
 		{
+			//BGMの再生
+			if (!Novice::IsPlayingAudio(playHandleBGM)) {
+				playHandleBGM = Novice::PlayAudio(gamePlayBGM, false, 0.4f);
+			}
+
 			stageTimer--;
+
 #pragma region タイム計算・表示
 			minutes -= 1;
 			times = minutes / 60;
@@ -400,11 +423,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			timeNumberArray[1] = times;
 #pragma endregion
 
-			atacckTimer++;
+			attackTimer++;
 
 #pragma region bullet
 			//縦散弾
-			if (atacckTimer >= 0.0f) {
+			if (attackTimer >= 0.0f) {
 				shotVerticalFlag = true;
 				if (shotVerticalFlag == true) {
 					if (bullretVerticalCount < 6) {
@@ -453,7 +476,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 				}
 			}				//横散弾
-			if (atacckTimer >= 1800) {
+			if (attackTimer >= 1800) {
 				shotBesideFlag = true;
 				if (shotBesideFlag == true) {
 					if (bullretBesideCount < 6) {
@@ -511,7 +534,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 
 			//斜め散弾
-			if (atacckTimer >= 3600) {
+			if (attackTimer >= 3600) {
 				shotDiagonalFlag = true;
 				if (shotDiagonalFlag == true) {
 					if (bullretDiagonalCount < 6) {
@@ -693,8 +716,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			//横向きのレーザー縦向きのレーザー
 
-			if (atacckTimer >= 1800) {
-				if (horizontalLaserCapsule.end.x < 1300){
+			if (attackTimer >= 1800) {
+				if (horizontalLaserCapsule.end.x < 1300) {
 					horizontalLaser.isShot = true;
 
 					horizontalLaserLineVector.x = horizontalLaserCapsule.end.x - horizontalLaserCapsule.start.x;
@@ -730,11 +753,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 					horizontalLaserSumRadius = player.radius + horizontalLaserCapsule.radius;
 
-					if (horizontalLaserDot < horizontalLaserSumRadius){
+					if (horizontalLaserDot < horizontalLaserSumRadius) {
 						horizontalLaser.isShot = true;
 						player.isHit = false;
 					}
-				} else{
+				} else {
 					horizontalLaser.isShot = false;
 					horizontalLaserCapsule.start = { -64,float(rand() % 700 + 40) };
 					horizontalLaserCapsule.end = { -64,horizontalLaserCapsule.start.y + 32 };
@@ -748,8 +771,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma region レーザー当たり判定(縦)
 
-			if (atacckTimer >= 0.0f) {
-				if (verticalLaserCapsule.end.y < 800){
+			if (attackTimer >= 0.0f) {
+				if (verticalLaserCapsule.end.y < 800) {
 					verticalLaser.isShot = true;
 					//縦
 					verticalLaserLineVector.x = verticalLaserCapsule.end.x - verticalLaserCapsule.start.x;
@@ -757,7 +780,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					verticalLaserLength = sqrtf(verticalLaserLineVector.x * verticalLaserLineVector.x + verticalLaserLineVector.y * verticalLaserLineVector.y);
 
 					verticalLaserUnitVector = verticalLaserLineVector;
-					if (verticalLaserLength != 0.0f){
+					if (verticalLaserLength != 0.0f) {
 						verticalLaserUnitVector.x = verticalLaserLineVector.x / verticalLaserLength;
 						verticalLaserUnitVector.y = verticalLaserLineVector.y / verticalLaserLength;
 					}
@@ -795,8 +818,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma endregion
 
 #pragma region レーザー当たり判定(斜め)
-			if (atacckTimer >= 3600) {
-				if (obliqueLaserCapsule.end.y < 1000){//obliqueLaserCapsule.end.x<1024||
+			if (attackTimer >= 3600) {
+				if (obliqueLaserCapsule.end.y < 1000) {//obliqueLaserCapsule.end.x<1024||
 					obliqueLaser.isShot = true;
 
 					obliqueLaserLineVector.x = obliqueLaserCapsule.end.x - obliqueLaserCapsule.start.x;
@@ -804,7 +827,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					obliqueLaserLength = sqrtf(obliqueLaserLineVector.x * obliqueLaserLineVector.x + obliqueLaserLineVector.y * obliqueLaserLineVector.y);
 
 					obliqueLaserUnitVector = obliqueLaserLineVector;
-					if (obliqueLaserLength != 0.0f){
+					if (obliqueLaserLength != 0.0f) {
 						obliqueLaserUnitVector.x = obliqueLaserLineVector.x / obliqueLaserLength;
 						obliqueLaserUnitVector.y = obliqueLaserLineVector.y / obliqueLaserLength;
 					}
@@ -1032,57 +1055,63 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		}
 
+		if (scene == GAMEOVER) {
+			//BGMの再生
+			if (!Novice::IsPlayingAudio(playHandleBGM)) {
+				playHandleBGM = Novice::PlayAudio(badEndBGM, false, 0.2f);
+			}
+		}
+
 #pragma region シーンの切り替え
 
-			switch (scene){
-			case TITLE:
-				Novice::DrawSprite(0, 0, titleGraph, 1.0f, 1.0f, 0.0f, WHITE);
-				if (keys[DIK_BACKSPACE] && !preKeys[DIK_BACKSPACE]) {
-					scene = EXPLAIN;
-				}
-				if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
-					scene = GAMESCENE;
-				}
-
-				break;
-			case EXPLAIN:
-				Novice::ScreenPrintf(0, 0, "EXPLAIN");
-				if (keys[DIK_BACKSPACE] && !preKeys[DIK_BACKSPACE]) {
-					scene = TITLE;
-				}
-				break;
-			case GAMESCENE:
-				Novice::ScreenPrintf(0, 0, "gamescene");
-				if (minutes <= 0) {
-					scene = CLEAR;
-				}
-				if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
-					scene = GAMEOVER;
-				}
-				if (player.life == 0) {
-					scene = GAMEOVER;
-
-				}
-				if (stageTimer <= 0) {
-					scene = CLEAR;
-				}
-				break;
-			case GAMEOVER:
-				Novice::DrawSprite(0, 0, badEndGraph, 1.0f, 1.0f, 0.0f, WHITE);
-				if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
-					scene = TITLE;
-				}
-
-				break;
-			case CLEAR:
-				Novice::DrawSprite(0, 0, clearGraph, 1.0f, 1.0f, 0.0f, WHITE);
-				if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
-					scene = TITLE;
-				}
-
-				break;
+		switch (scene) {
+		case TITLE:
+			Novice::DrawSprite(0, 0, titleGraph, 1.0f, 1.0f, 0.0f, WHITE);
+			if (keys[DIK_BACKSPACE] && !preKeys[DIK_BACKSPACE]) {
+				scene = EXPLAIN;
 			}
-		
+			if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
+				scene = GAMESCENE;
+			}
+
+			break;
+		case EXPLAIN:
+			if (keys[DIK_BACKSPACE] && !preKeys[DIK_BACKSPACE]) {
+				scene = TITLE;
+			}
+			break;
+		case GAMESCENE:
+			if (minutes <= 0) {
+				Novice::StopAudio(playHandleBGM);
+				scene = CLEAR;
+			}
+			if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
+				Novice::StopAudio(playHandleBGM);
+				scene = GAMEOVER;
+			}
+			if (player.life <= 0) {
+				Novice::StopAudio(playHandleBGM);
+				scene = GAMEOVER;
+
+			}
+			break;
+		case GAMEOVER:
+			Novice::DrawSprite(0, 0, badEndGraph, 1.0f, 1.0f, 0.0f, WHITE);
+			if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
+				Novice::StopAudio(playHandleBGM);
+				scene = TITLE;
+			}
+
+			break;
+		case CLEAR:
+			Novice::DrawSprite(0, 0, clearGraph, 1.0f, 1.0f, 0.0f, WHITE);
+			if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
+				scene = TITLE;
+			}
+
+			break;
+		}
+
 
 #pragma endregion
 
@@ -1097,9 +1126,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
+		if (scene == EXPLAIN) {
+			Novice::DrawSprite(0, 0, explainGraph, 1.0f, 1.0f, 0.0f, WHITE);
+		}
 
+		if (scene == GAMESCENE) {
 
-		if (scene == GAMESCENE){
+			Novice::DrawSprite(0, 0, battleGraph, 1.0f, 1.0f, 0.0f, WHITE);
 
 #pragma region map描画
 
@@ -1132,7 +1165,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					static_cast<int>(horizontalLaserCapsule.end.x += horizontalLaser.move), static_cast<int>(horizontalLaserCapsule.end.y + horizontalLaser.size) - 16,
 					0, 0, static_cast<int>(horizontalLaser.move), static_cast<int>(horizontalLaser.size),
 					horizontalLaserGr, WHITE);
-				
+
 			}
 			if (verticalLaserCapsule.end.y < 800) {
 
@@ -1152,7 +1185,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			if (obliqueLaserCapsule.end.y < 1000) { //obliqueLaserCapsule.end.x < 1024 ||
 
 				obliqueLaser.move = 0;
-				obliqueLaser.move += obliqueLaser.move + 3;	
+				obliqueLaser.move += obliqueLaser.move + 3;
 				Novice::DrawSprite(static_cast<int>(obliqueLaserCapsule.end.x += obliqueLaser.move) - 1024, static_cast<int>(obliqueLaserCapsule.end.y += obliqueLaser.move) - 1024, obliqueLaserGr, 1.0f, 1.0f, 0.0f, WHITE);
 			}
 
@@ -1232,11 +1265,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 
-///
-/// ↑描画処理ここまで
-///
+		///
+		/// ↑描画処理ここまで
+		///
 
-// フレームの終了
+		// フレームの終了
 		Novice::EndFrame();
 
 
