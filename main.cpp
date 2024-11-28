@@ -1113,6 +1113,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				if (map[int(player.pos.y / 32)][int(player.pos.x / 32 - 0.13f)] == 1) {
 					player.move.x += 1.0f;
 				}
+				if (player.pos.x < 0.0f) {
+					player.move.x += 1.0f;
+				}
 			}
 
 			if (keys[DIK_D] || keys[DIK_RIGHT]) {
@@ -1361,7 +1364,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 
 
-			if (keys[DIK_A] && keys[DIK_D] || keys[DIK_LEFT] && keys[DIK_RIGHT]) {
+			if (!keys[DIK_A] && !keys[DIK_D] /*|| !keys[DIK_LEFT] && !keys[DIK_RIGHT]*/) {
 				flameCountSlime = 0;
 			}
 			if (player.isHit == true) {
